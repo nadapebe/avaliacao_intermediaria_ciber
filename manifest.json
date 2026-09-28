@@ -21,6 +21,8 @@
   ],
   "background": {
     "scripts": [
+      "lib/psl-data.js",
+      "lib/etld.js",
       "background/main.js"
     ],
     "persistent": true
