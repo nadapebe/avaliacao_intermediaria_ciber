@@ -447,6 +447,14 @@ var PL = window.PL || (window.PL = {});
   }
 
   PL.requests = {
+    /**
+     * Registro da pagina anterior da aba enquanto a nova navegacao nao foi
+     * efetivada (usado na deteccao de bounce tracking por redirecionamento
+     * no cliente, em background/tracking.js).
+     */
+    anterior: function (tabId) {
+      return anteriores.get(tabId) || null;
+    },
     registroDa: registroDa,
     requisicaoConhecida: requisicaoConhecida,
     dominioDe: dominioDe,

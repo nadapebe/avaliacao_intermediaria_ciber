@@ -26,6 +26,7 @@
       "background/state.js",
       "background/requests.js",
       "background/cookies.js",
+      "background/tracking.js",
       "background/main.js"
     ],
     "persistent": true

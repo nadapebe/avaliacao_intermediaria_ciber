@@ -203,5 +203,24 @@
   window.addEventListener(EVENTO_PONTE + ':ping', avisaPronto, true);
   avisaPronto();
 
+  // primeira interacao real do usuario com a pagina de topo (clique, tecla
+  // ou toque). Usada na deteccao de bounce tracking no cliente: uma pagina
+  // intermediaria que redireciona sozinha nunca recebe interacao.
+  if (ehTopo) {
+    var interagiu = false;
+    var aoInteragir = function (ev) {
+      if (interagiu || !ev.isTrusted) return;
+      interagiu = true;
+      envia({ tipo: 'interacao' });
+    };
+    ['pointerdown', 'keydown', 'touchstart'].forEach(function (tipo) {
+      window.addEventListener(tipo, aoInteragir, { capture: true, passive: true });
+    });
+    // pagina restaurada do bfcache ganha um registro novo no background
+    window.addEventListener('pageshow', function (ev) {
+      if (ev.persisted) interagiu = false;
+    });
+  }
+
   agendaColetas();
 })();

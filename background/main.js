@@ -271,6 +271,13 @@ function onIndexedDB(rec, ev, msg) {
   st.indexedDBViaHook = true;
 }
 
+/** Primeira interacao do usuario com a pagina de topo (bounce no cliente). */
+function onInteracao(msg, sender) {
+  if (!sender || sender.frameId !== 0) return;
+  var rec = PL.registroDoRemetente(msg, sender);
+  if (rec) rec.usuarioInteragiu = true;
+}
+
 /** Eventos do inject.js (repassados pelo content script). */
 function onPagina(msg, sender) {
   var ev = msg.evento;
@@ -294,7 +301,8 @@ PL.init = function () {
   // modulos com listeners proprios, na ordem de registro
   var modulos = [
     ['requests', PL.requests],
-    ['cookies', PL.cookies]
+    ['cookies', PL.cookies],
+    ['tracking', PL.tracking]
   ];
   modulos.forEach(function (m) {
     if (!m[1] || typeof m[1].register !== 'function') {
@@ -310,6 +318,7 @@ PL.init = function () {
 
   PL.onMensagem('storage', onStorage);
   PL.onMensagem('pagina', onPagina);
+  PL.onMensagem('interacao', onInteracao);
   PL.onEventoPagina('canvas', onCanvas);
   PL.onEventoPagina('vetor', onVetor);
   PL.onEventoPagina('indexedDB', onIndexedDB);
