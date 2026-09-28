@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Demo hijacking - PrivacyLens</title>
+  <style>
+    body { font: 15px system-ui, sans-serif; max-width: 640px; margin: 40px auto; padding: 0 16px; color: #1b2430; }
+    h1 { font-size: 20px; }
+    .campo { width: 100%; padding: 8px; font-size: 15px; margin: 8px 0 16px; }
+    code { background: #f0f2f5; padding: 1px 4px; border-radius: 4px; }
+    ol { line-height: 1.7; }
+  </style>
+</head>
+<body>
+  <h1>Página de teste de hijacking / hook</h1>
+  <p>Esta página local aciona, de propósito, os indícios que o PrivacyLens detecta.
+     O script de terceira parte é carregado de <code>127.0.0.1</code>.</p>
+
+  <p>Digite algo aqui (a página não guarda nem envia nada):</p>
+  <input class="campo" type="text" placeholder="qualquer texto de teste">
+
+  <ol>
+    <li>Espere <b>45 segundos</b> (o polling precisa de tempo para ser detectado).</li>
+    <li>Clique no ícone do PrivacyLens e abra a aba <b>Hijacking</b>.</li>
+    <li>Tire o print, exporte o JSON e salve o HAR.</li>
+  </ol>
+
+  <!-- script de terceira parte (127.0.0.1 e nao localhost) -->
+  <script src="http://127.0.0.1:8089/tracker.js"></script>
+</body>
+</html>

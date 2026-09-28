@@ -1,0 +1,771 @@
+{
+  "ferramenta": "PrivacyLens",
+  "versao": "1.0.0",
+  "geradoEm": "2026-09-28T18:12:54.944Z",
+  "pagina": {
+    "url": "http://localhost:8089/demo.html",
+    "dominio": "localhost",
+    "inicioCarregamento": "2026-09-28T18:11:18.147Z",
+    "cookieStoreId": "firefox-default",
+    "navegacao": {
+      "requestId": "1362",
+      "origem": "http://localhost:8089/demo.html",
+      "origemDominio": "localhost",
+      "inicio": "http://localhost:8089/demo.html",
+      "ts": 1790619078146,
+      "restauradaDoCache": false,
+      "anteriorVisto": true
+    },
+    "usuarioInteragiu": true
+  },
+  "score": {
+    "valor": 82,
+    "nota": "A",
+    "totalPenalidades": 18,
+    "criterios": [
+      {
+        "id": "terceiros",
+        "nome": "Domínios de 3ª parte contatados",
+        "peso": 15,
+        "observado": 1,
+        "detalhe": "127.0.0.1",
+        "penalidade": 3,
+        "formula": "min(15, 3 * log2(1 + n))",
+        "justificativa": "Superfície de exposição: cada terceiro recebe IP, User-Agent e a página visitada. Escala logarítmica porque o primeiro terceiro pesa muito mais que o trigésimo (a penalidade atinge o teto em 31 terceiros)."
+      },
+      {
+        "id": "cookies3p",
+        "nome": "Cookies de 3ª parte persistentes",
+        "peso": 20,
+        "observado": 0,
+        "detalhe": "nenhum",
+        "penalidade": 0,
+        "formula": "min(20, 4 * n)",
+        "justificativa": "Identificador estável entre sites: o mecanismo clássico de rastreamento."
+      },
+      {
+        "id": "cookies1pLongos",
+        "nome": "Cookies de 1ª parte persistentes > 90 dias",
+        "peso": 5,
+        "observado": 0,
+        "detalhe": "nenhum",
+        "penalidade": 0,
+        "formula": "min(5, 1 * n)",
+        "justificativa": "Cookie de primeira parte de longa duração funciona como identificador do visitante (ex.: _ga, _fbp), lido por scripts de terceiros embutidos na página."
+      },
+      {
+        "id": "storage3p",
+        "nome": "Storage HTML5 de 3ª parte (em iframe)",
+        "peso": 10,
+        "observado": 0,
+        "detalhe": "nenhum",
+        "penalidade": 0,
+        "formula": "min(10, 3 * n)",
+        "justificativa": "Persistência fora do ciclo de vida do cookie: sobrevive à limpeza de cookies e não é controlada pelas preferências de cookie."
+      },
+      {
+        "id": "localStorage1p",
+        "nome": "Volume de localStorage de 1ª parte",
+        "peso": 5,
+        "observado": 0,
+        "detalhe": "0 KB",
+        "penalidade": 0,
+        "formula": "min(5, bytes / 50 KB)",
+        "justificativa": "Indicador de supercookie ou de estado excessivo guardado no navegador do usuário."
+      },
+      {
+        "id": "canvas",
+        "nome": "Canvas fingerprinting",
+        "peso": 15,
+        "observado": false,
+        "detalhe": "não detectado",
+        "penalidade": 0,
+        "formula": "binário: 15 se detectado",
+        "justificativa": "Identificação sem consentimento e sem estado: não é removida limpando cookies e o usuário não consegue evitar."
+      },
+      {
+        "id": "sync",
+        "nome": "Cookie sync / bounce tracking",
+        "peso": 15,
+        "observado": {
+          "sincronismos": 0,
+          "bounce": false
+        },
+        "detalhe": "não detectado",
+        "penalidade": 0,
+        "formula": "8 por sync distinto, +15 se houver bounce, teto 15",
+        "justificativa": "Une as identidades do usuário em domínios diferentes, anulando o isolamento de cookies por site."
+      },
+      {
+        "id": "hijack",
+        "nome": "Indícios de hijacking / hook",
+        "peso": 10,
+        "observado": 3,
+        "detalhe": "websocket (127.0.0.1, media), polling (127.0.0.1, media), hook (127.0.0.1, alta)",
+        "penalidade": 10,
+        "formula": "5 por indício de severidade média ou alta, teto 10",
+        "justificativa": "Vai além do rastreamento: é controle do navegador (canal de comando, interceptação de chamadas)."
+      },
+      {
+        "id": "sessao",
+        "nome": "Session recording / keylogging",
+        "peso": 5,
+        "observado": true,
+        "detalhe": "keylogging (127.0.0.1)",
+        "penalidade": 5,
+        "formula": "binário: 5 se detectado",
+        "justificativa": "Captura o conteúdo digitado e os movimentos do usuário, não só metadados."
+      }
+    ],
+    "informativo": {
+      "facebookPixel": false,
+      "googleRemarketing": false
+    },
+    "calculadoEm": 1790619174944
+  },
+  "requisicoes": {
+    "total": 53,
+    "primeiraParte": 2,
+    "terceiraParte": 51,
+    "erros": 1,
+    "dominiosTerceiros": 1,
+    "logDescartadas": 0
+  },
+  "terceiros": [
+    {
+      "dominio": "127.0.0.1",
+      "requisicoes": 51,
+      "tipos": [
+        "script",
+        "websocket",
+        "xmlhttprequest"
+      ],
+      "enviouCookie": false,
+      "recebeuSetCookie": false,
+      "primeira": "2026-09-28T18:11:18.166Z",
+      "ultima": "2026-09-28T18:12:54.638Z",
+      "exemplos": [
+        "http://127.0.0.1:8089/tracker.js",
+        "ws://127.0.0.1:8089/canal",
+        "http://127.0.0.1:8089/injetado.js",
+        "http://127.0.0.1:8089/poll"
+      ],
+      "classificacaoFirefox": [],
+      "erros": 1,
+      "ultimoErro": "NS_ERROR_WEBSOCKET_CONNECTION_REFUSED",
+      "bloqueadasFirefox": 0,
+      "bloqueadasPlugin": 0
+    }
+  ],
+  "cookies": {
+    "resumo": {
+      "injetados": 0,
+      "preexistentes": 0,
+      "removidos": 0,
+      "primeiraParte": 0,
+      "terceiraParte": 0,
+      "sessao": 0,
+      "persistente": 0,
+      "matriz": {
+        "primeira": {
+          "sessao": 0,
+          "persistente": 0
+        },
+        "terceira": {
+          "sessao": 0,
+          "persistente": 0
+        }
+      },
+      "terceiraPersistente": 0,
+      "primeiraLongoPrazo": 0,
+      "longoPrazo": 0,
+      "aptoCrossSite": 0,
+      "httpOnly": 0,
+      "secure": 0,
+      "particionados": 0,
+      "naoArmazenados": 0,
+      "viaHttp": 0,
+      "viaJavascript": 0
+    },
+    "snapshotEm": "2026-09-28T18:11:23.199Z",
+    "descartados": 0,
+    "lista": []
+  },
+  "storage": [
+    {
+      "origem": "http://localhost:8089",
+      "dominio": "localhost",
+      "terceiraParte": false,
+      "topo": true,
+      "frames": 1,
+      "coletas": 3,
+      "momento": "load+3s",
+      "localStorage": {
+        "disponivel": true,
+        "erro": "",
+        "chaves": 0,
+        "bytes": 0,
+        "amostra": []
+      },
+      "sessionStorage": {
+        "disponivel": true,
+        "erro": "",
+        "chaves": 0,
+        "bytes": 0,
+        "amostra": []
+      },
+      "picoBytesLocal": 0,
+      "picoBytesSessao": 0,
+      "indexedDB": {
+        "bancos": [],
+        "viaHook": false,
+        "erro": ""
+      },
+      "documentCookie": {
+        "quantidade": 0,
+        "nomes": []
+      }
+    }
+  ],
+  "fingerprint": {
+    "canvasFingerprint": false,
+    "canvas": [],
+    "vetores": []
+  },
+  "rastreamento": {
+    "resumo": {
+      "sincronismos": 0,
+      "paresSync": 0,
+      "vazamentosPrimeiraParte": 0,
+      "idsCompartilhados": 0,
+      "bounces": 0,
+      "redirecionamentosSemCookie": 0,
+      "decoracoes": 0
+    },
+    "sync": [],
+    "bounce": [],
+    "decoracao": []
+  },
+  "hijack": {
+    "resumo": {
+      "total": 5,
+      "porTipo": {
+        "websocket": 1,
+        "polling": 1,
+        "scriptInjetado": 1,
+        "hook": 1,
+        "keylogging": 1
+      },
+      "alta": 1,
+      "media": 3,
+      "baixa": 1
+    },
+    "indicios": [
+      {
+        "tipo": "websocket",
+        "severidade": "media",
+        "dominio": "127.0.0.1",
+        "evidencia": "ws://127.0.0.1:8089/canal",
+        "scripts": [
+          "http://127.0.0.1:8089/tracker.js"
+        ]
+      },
+      {
+        "tipo": "polling",
+        "severidade": "media",
+        "dominio": "127.0.0.1",
+        "evidencia": "127.0.0.1/poll - 48 requisicoes, intervalo mediano 2004 ms em 94 s",
+        "detalhe": {
+          "dominio": "127.0.0.1",
+          "host": "127.0.0.1",
+          "caminho": "/poll",
+          "requisicoes": 48,
+          "intervaloMedianoMs": 2004,
+          "duracaoMs": 94453,
+          "regularidade": 1,
+          "tipos": [
+            "xmlhttprequest"
+          ]
+        }
+      },
+      {
+        "tipo": "scriptInjetado",
+        "severidade": "baixa",
+        "dominio": "127.0.0.1",
+        "evidencia": "http://127.0.0.1:8089/injetado.js"
+      },
+      {
+        "tipo": "hook",
+        "severidade": "alta",
+        "dominio": "127.0.0.1",
+        "evidencia": "fetch alterado em DOMContentLoaded, load, load+3s - codigo: function () {\n    // apenas repassa a chamada; serve so para o detector ver a troca de fetch\n    return fetchOriginal.apply(this, arguments);\n  }",
+        "api": "fetch",
+        "scripts": [
+          {
+            "script": "http://127.0.0.1:8089/tracker.js",
+            "dominio": "127.0.0.1",
+            "terceiraParte": true
+          }
+        ]
+      },
+      {
+        "tipo": "keylogging",
+        "severidade": "media",
+        "dominio": "127.0.0.1",
+        "evidencia": "listeners keydown registrados por http://127.0.0.1:8089/tracker.js"
+      }
+    ]
+  },
+  "bloqueio": {
+    "total": 0,
+    "porDominio": [],
+    "lista": {
+      "ativo": false,
+      "carregada": true,
+      "totalSessao": 32,
+      "regras": [
+        {
+          "padrao": "bad.third-party.site",
+          "ativo": true,
+          "criadoEm": 1790609670647,
+          "bloqueiosSessao": 24
+        },
+        {
+          "padrao": "broken.third-party.site",
+          "ativo": true,
+          "criadoEm": 1790609977456,
+          "bloqueiosSessao": 8
+        }
+      ]
+    }
+  },
+  "erros": [],
+  "redirecionamentos": [],
+  "requestLog": [
+    {
+      "url": "http://localhost:8089/demo.html",
+      "dominio": "localhost",
+      "tipo": "main_frame",
+      "ts": "2026-09-28T18:11:18.146Z",
+      "terceiraParte": false,
+      "requestId": "1362"
+    },
+    {
+      "url": "http://127.0.0.1:8089/tracker.js",
+      "dominio": "127.0.0.1",
+      "tipo": "script",
+      "ts": "2026-09-28T18:11:18.166Z",
+      "terceiraParte": true,
+      "requestId": "1363"
+    },
+    {
+      "url": "http://localhost:8089/favicon.ico",
+      "dominio": "localhost",
+      "tipo": "image",
+      "ts": "2026-09-28T18:11:18.177Z",
+      "terceiraParte": false,
+      "requestId": "1364"
+    },
+    {
+      "url": "ws://127.0.0.1:8089/canal",
+      "dominio": "127.0.0.1",
+      "tipo": "websocket",
+      "ts": "2026-09-28T18:11:18.177Z",
+      "terceiraParte": true,
+      "requestId": "1365",
+      "erro": "NS_ERROR_WEBSOCKET_CONNECTION_REFUSED"
+    },
+    {
+      "url": "http://127.0.0.1:8089/injetado.js",
+      "dominio": "127.0.0.1",
+      "tipo": "script",
+      "ts": "2026-09-28T18:11:19.687Z",
+      "terceiraParte": true,
+      "requestId": "1366"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:11:20.185Z",
+      "terceiraParte": true,
+      "requestId": "1367"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:11:22.184Z",
+      "terceiraParte": true,
+      "requestId": "1368"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:11:24.188Z",
+      "terceiraParte": true,
+      "requestId": "1369"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:11:26.199Z",
+      "terceiraParte": true,
+      "requestId": "1370"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:11:28.202Z",
+      "terceiraParte": true,
+      "requestId": "1371"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:11:30.257Z",
+      "terceiraParte": true,
+      "requestId": "1372"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:11:32.260Z",
+      "terceiraParte": true,
+      "requestId": "1373"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:11:34.266Z",
+      "terceiraParte": true,
+      "requestId": "1374"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:11:36.263Z",
+      "terceiraParte": true,
+      "requestId": "1375"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:11:38.263Z",
+      "terceiraParte": true,
+      "requestId": "1376"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:11:40.484Z",
+      "terceiraParte": true,
+      "requestId": "1377"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:11:42.488Z",
+      "terceiraParte": true,
+      "requestId": "1378"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:11:44.488Z",
+      "terceiraParte": true,
+      "requestId": "1379"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:11:46.493Z",
+      "terceiraParte": true,
+      "requestId": "1380"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:11:48.497Z",
+      "terceiraParte": true,
+      "requestId": "1381"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:11:50.501Z",
+      "terceiraParte": true,
+      "requestId": "1382"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:11:52.506Z",
+      "terceiraParte": true,
+      "requestId": "1383"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:11:54.511Z",
+      "terceiraParte": true,
+      "requestId": "1384"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:11:56.516Z",
+      "terceiraParte": true,
+      "requestId": "1385"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:11:58.521Z",
+      "terceiraParte": true,
+      "requestId": "1386"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:00.526Z",
+      "terceiraParte": true,
+      "requestId": "1387"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:02.526Z",
+      "terceiraParte": true,
+      "requestId": "1388"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:04.531Z",
+      "terceiraParte": true,
+      "requestId": "1389"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:06.536Z",
+      "terceiraParte": true,
+      "requestId": "1390"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:08.539Z",
+      "terceiraParte": true,
+      "requestId": "1391"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:10.542Z",
+      "terceiraParte": true,
+      "requestId": "1392"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:12.547Z",
+      "terceiraParte": true,
+      "requestId": "1393"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:14.552Z",
+      "terceiraParte": true,
+      "requestId": "1394"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:16.555Z",
+      "terceiraParte": true,
+      "requestId": "1395"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:18.557Z",
+      "terceiraParte": true,
+      "requestId": "1396"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:20.561Z",
+      "terceiraParte": true,
+      "requestId": "1397"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:22.565Z",
+      "terceiraParte": true,
+      "requestId": "1398"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:24.570Z",
+      "terceiraParte": true,
+      "requestId": "1399"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:26.575Z",
+      "terceiraParte": true,
+      "requestId": "1400"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:28.582Z",
+      "terceiraParte": true,
+      "requestId": "1401"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:30.586Z",
+      "terceiraParte": true,
+      "requestId": "1402"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:32.590Z",
+      "terceiraParte": true,
+      "requestId": "1403"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:34.596Z",
+      "terceiraParte": true,
+      "requestId": "1404"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:36.598Z",
+      "terceiraParte": true,
+      "requestId": "1405"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:38.601Z",
+      "terceiraParte": true,
+      "requestId": "1406"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:40.605Z",
+      "terceiraParte": true,
+      "requestId": "1407"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:42.617Z",
+      "terceiraParte": true,
+      "requestId": "1409"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:44.614Z",
+      "terceiraParte": true,
+      "requestId": "1410"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:46.619Z",
+      "terceiraParte": true,
+      "requestId": "1411"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:48.625Z",
+      "terceiraParte": true,
+      "requestId": "1412"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:50.629Z",
+      "terceiraParte": true,
+      "requestId": "1413"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:52.635Z",
+      "terceiraParte": true,
+      "requestId": "1414"
+    },
+    {
+      "url": "http://127.0.0.1:8089/poll",
+      "dominio": "127.0.0.1",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T18:12:54.638Z",
+      "terceiraParte": true,
+      "requestId": "1415"
+    }
+  ]
+}

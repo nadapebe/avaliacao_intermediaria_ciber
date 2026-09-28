@@ -1,0 +1,467 @@
+{
+  "title": "Blacklight - API Request",
+  "page_title": "Breaking News, Latest News and Videos | CNN",
+  "uri_ins": "https://edition.cnn.com",
+  "uri_dest": "https://edition.cnn.com/",
+  "uri_redirects": [],
+  "secure_connection": {},
+  "host": "edition.cnn.com",
+  "config": {
+    "emulateDevice": {
+      "name": "iPhone 13 Mini",
+      "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.4 Mobile/15E148 Safari/604.1",
+      "viewport": {
+        "width": 375,
+        "height": 812,
+        "deviceScaleFactor": 3,
+        "isMobile": true,
+        "hasTouch": true,
+        "isLandscape": false
+      }
+    },
+    "cleareCache": true,
+    "captureHar": true,
+    "captureLinks": false,
+    "enableAdBlock": false,
+    "saveBrowserProfile": false,
+    "numPages": 1,
+    "defaultTimeout": 30000,
+    "defaultWaitUntil": "networkidle2",
+    "headless": true,
+    "headers": {
+      "x-forwarded-for": "[REMOVIDO]"
+    },
+    "extraChromiumArgs": [
+      "--ash-no-nudges",
+      "--disable-domain-reliability",
+      "--disable-print-preview",
+      "--disk-cache-size=33554432",
+      "--no-default-browser-check",
+      "--no-pings",
+      "--single-process",
+      "--font-render-hinting=none",
+      "--disable-features=AudioServiceOutOfProcess,IsolateOrigins,site-per-process",
+      "--enable-features=SharedArrayBuffer",
+      "--ignore-gpu-blocklist",
+      "--in-process-gpu",
+      "--use-gl=angle",
+      "--use-angle=swiftshader",
+      "--enable-unsafe-swiftshader",
+      "--allow-running-insecure-content",
+      "--disable-setuid-sandbox",
+      "--disable-site-isolation-trials",
+      "--disable-web-security",
+      "--headless='shell'",
+      "--no-sandbox",
+      "--no-zygote"
+    ],
+    "extraPuppeteerOptions": {}
+  },
+  "browser": {
+    "name": "Chromium",
+    "version": "HeadlessChrome/138.0.7204.0",
+    "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/138.0.7204.0 Safari/537.36",
+    "platform": {
+      "name": "Linux",
+      "version": "5.10.255-268-309.1092.amzn2.x86_64"
+    }
+  },
+  "script": {
+    "host": "169.254.52.53",
+    "version": {
+      "npm": "3.11.0",
+      "commit": "dev"
+    },
+    "node_version": "v22.23.2"
+  },
+  "start_time": "2026-09-28T19:30:42.923Z",
+  "end_time": "2026-09-28T19:31:01.098Z",
+  "location": "us-ca",
+  "browsing_history": [
+    "https://edition.cnn.com/",
+    "https://edition.cnn.com/style/beauty"
+  ],
+  "hosts": {
+    "requests": {
+      "first_party": [
+        "edition.cnn.com",
+        "lightning.cnn.com",
+        "media.cnn.com",
+        "www.cnn.com",
+        "default.any-any.prd.api.bolt.cnn.com"
+      ],
+      "third_party": [
+        "cdn.optimizely.com",
+        "registry.api.cnn.io",
+        "fave.api.cnn.io",
+        "js.stripe.com",
+        "fonts.googleapis.com",
+        "imasdk.googleapis.com",
+        "cdn-media.brightline.tv",
+        "events.brightline.tv",
+        "turnip.cdn.turner.com",
+        "cookies-data.onetrust.io",
+        "m.stripe.network",
+        "m.stripe.com"
+      ]
+    }
+  },
+  "reports": {
+    "behaviour_event_listeners": {
+      "MOUSE": {
+        "https://edition.cnn.com/": [
+          "scroll"
+        ]
+      },
+      "KEYBOARD": {
+        "https://registry.api.cnn.io/bundles/fave/4.64.0/app": [
+          "keydown"
+        ]
+      },
+      "SENSOR": {
+        "https://edition.cnn.com/": [
+          "orientationchange"
+        ]
+      }
+    },
+    "canvas_fingerprinters": {
+      "data_url": {},
+      "fingerprinters": [],
+      "styles": {},
+      "texts": {}
+    },
+    "canvas_font_fingerprinters": {
+      "canvas_font": {},
+      "text_measure": {}
+    },
+    "cookies": [
+      {
+        "name": "wbdFch",
+        "value": "3b92524377eb236db28c2ac827ebb3cd9bee29c6",
+        "domain": "edition.cnn.com",
+        "path": "/style/beauty",
+        "expires": "2026-09-28T19:31:22.667Z",
+        "size": 46,
+        "httpOnly": false,
+        "secure": true,
+        "session": false,
+        "sameSite": "None",
+        "priority": "Medium",
+        "sameParty": false,
+        "sourceScheme": "Secure",
+        "sourcePort": 443,
+        "type": "unknown",
+        "third_party": false
+      },
+      {
+        "name": "SecGpc",
+        "value": "0",
+        "domain": "cnn.com",
+        "path": "/",
+        "expires": -1,
+        "size": 7,
+        "httpOnly": false,
+        "secure": true,
+        "session": true,
+        "sameSite": "None",
+        "priority": "Medium",
+        "sameParty": false,
+        "sourceScheme": "Secure",
+        "sourcePort": 443,
+        "type": "unknown",
+        "third_party": false
+      },
+      {
+        "name": "countryCode",
+        "value": "US",
+        "domain": "cnn.com",
+        "path": "/",
+        "expires": -1,
+        "size": 13,
+        "httpOnly": false,
+        "secure": true,
+        "session": true,
+        "sameSite": "None",
+        "priority": "Medium",
+        "sameParty": false,
+        "sourceScheme": "Secure",
+        "sourcePort": 443,
+        "type": "unknown",
+        "third_party": false
+      },
+      {
+        "name": "stateCode",
+        "value": "CA",
+        "domain": "cnn.com",
+        "path": "/",
+        "expires": -1,
+        "size": 11,
+        "httpOnly": false,
+        "secure": true,
+        "session": true,
+        "sameSite": "None",
+        "priority": "Medium",
+        "sameParty": false,
+        "sourceScheme": "Secure",
+        "sourcePort": 443,
+        "type": "unknown",
+        "third_party": false
+      },
+      {
+        "name": "FastAB",
+        "value": "0=775,1=358,2=743,3=962,4=582,5=396,6=028,7=717,8=634,9=005,10=686,11=879,12=905,13=934,14=166,15=906,16=515,17=534,18=173,19=886,h=23,c=6abac06c,u=6abac06c",
+        "domain": "cnn.com",
+        "path": "/",
+        "expires": "2027-09-28T19:30:52.667Z",
+        "size": 162,
+        "httpOnly": true,
+        "secure": true,
+        "session": false,
+        "sameSite": "None",
+        "priority": "Medium",
+        "sameParty": false,
+        "sourceScheme": "Secure",
+        "sourcePort": 443,
+        "type": "unknown",
+        "third_party": false
+      },
+      {
+        "name": "usprivacy",
+        "value": "1YYN",
+        "domain": "cnn.com",
+        "path": "/",
+        "expires": -1,
+        "size": 13,
+        "httpOnly": false,
+        "secure": true,
+        "session": true,
+        "sameSite": "None",
+        "priority": "Medium",
+        "sameParty": false,
+        "sourceScheme": "Secure",
+        "sourcePort": 443,
+        "type": "js",
+        "third_party": false
+      },
+      {
+        "name": "akacd_cvp_prod_ion",
+        "value": "1790623973~rv=55~id=b38356548ffb32fa6224f8dcb1fe3f86",
+        "domain": "turnip.cdn.turner.com",
+        "path": "/",
+        "expires": "2026-09-28T19:32:53.247Z",
+        "size": 70,
+        "httpOnly": false,
+        "secure": true,
+        "session": false,
+        "sameSite": "None",
+        "priority": "Medium",
+        "sameParty": false,
+        "sourceScheme": "Secure",
+        "sourcePort": 443,
+        "type": "unknown",
+        "third_party": true
+      },
+      {
+        "name": "geoData",
+        "value": "san jose|CA|95123|US|NA|-700|broadband|37.240|-121.830|807",
+        "domain": "cnn.com",
+        "path": "/",
+        "expires": -1,
+        "size": 65,
+        "httpOnly": false,
+        "secure": true,
+        "session": true,
+        "sameSite": "None",
+        "priority": "Medium",
+        "sameParty": false,
+        "sourceScheme": "Secure",
+        "sourcePort": 443,
+        "type": "unknown",
+        "third_party": false
+      },
+      {
+        "name": "nexus-web-application-identifier",
+        "value": "9ee00d06-7f8d-4693-b02b-e5f6a7780f68|1790623854009",
+        "domain": "edition.cnn.com",
+        "path": "/",
+        "expires": "2027-11-02T19:30:54.009Z",
+        "size": 82,
+        "httpOnly": false,
+        "secure": false,
+        "session": false,
+        "priority": "Medium",
+        "sameParty": false,
+        "sourceScheme": "Secure",
+        "sourcePort": 443,
+        "type": "unknown",
+        "third_party": false
+      },
+      {
+        "name": "OTGPPConsent",
+        "value": "DBABLA~BVQqAAAAAABY.QA",
+        "domain": "cnn.com",
+        "path": "/",
+        "expires": "2027-11-02T19:30:55.910Z",
+        "size": 34,
+        "httpOnly": false,
+        "secure": true,
+        "session": false,
+        "sameSite": "None",
+        "priority": "Medium",
+        "sameParty": false,
+        "sourceScheme": "Secure",
+        "sourcePort": 443,
+        "type": "unknown",
+        "third_party": false
+      },
+      {
+        "name": "_OT_sm",
+        "value": "3d9a6f21-8e47-43f8-8d58-d86150f3e92b",
+        "domain": "edition.cnn.com",
+        "path": "/",
+        "expires": "2026-09-29T19:30:55.000Z",
+        "size": 42,
+        "httpOnly": false,
+        "secure": false,
+        "session": false,
+        "sameSite": "Lax",
+        "priority": "Medium",
+        "sameParty": false,
+        "sourceScheme": "Secure",
+        "sourcePort": 443,
+        "type": "unknown",
+        "third_party": false
+      },
+      {
+        "name": "OptanonControl",
+        "value": "ccc=US&csc=CA&cic=0&otvers=202608.1.0&pctm=0&reg=us&ustcs=1YYN&tos=1&ds=1&td=1&vers=4.2.15",
+        "domain": "cnn.com",
+        "path": "/",
+        "expires": "2027-11-02T19:30:56.033Z",
+        "size": 104,
+        "httpOnly": false,
+        "secure": true,
+        "session": false,
+        "sameSite": "None",
+        "priority": "Medium",
+        "sameParty": false,
+        "sourceScheme": "Secure",
+        "sourcePort": 443,
+        "type": "unknown",
+        "third_party": false
+      },
+      {
+        "name": "OptanonConsent",
+        "value": "isGpcEnabled=0&datestamp=Mon+Sep+28+2026+19%3A30%3A56+GMT%2B0000+(Coordinated+Universal+Time)&version=202608.1.0&browserGpcFlag=0&isDntEnabled=0&isIABGlobal=false&hosts=&consentId=cad11ba8-dce8-4635-96fd-629ab481df60&interactionCount=0&isAnonUser=1&prevHadToken=0&landingPath=https%3A%2F%2Fedition.cnn.com%2Fstyle%2Fbeauty&GPPCookiesCount=1&gppSid=7&groups=OSSTA_BG%3A1%2Cdsh%3A1%2Cdsl%3A1%2Cpap%3A1%2Cpad%3A1%2Creq%3A1%2Cdsa%3A1%2Ccad%3A1%2Cpcp%3A1%2Cpcd%3A1%2Cmap%3A1%2Cmcp%3A1%2Cmra%3A1%2Cpdd%3A1%2Csec%3A1%2Ctdc%3A1%2Cscp%3A1%2Cdid%3A1%2Ccos%3A1%2Cdlk%3A1",
+        "domain": "cnn.com",
+        "path": "/",
+        "expires": "2027-11-02T19:30:56.036Z",
+        "size": 573,
+        "httpOnly": false,
+        "secure": true,
+        "session": false,
+        "sameSite": "None",
+        "priority": "Medium",
+        "sameParty": false,
+        "sourceScheme": "Secure",
+        "sourcePort": 443,
+        "type": "unknown",
+        "third_party": false
+      },
+      {
+        "name": "m",
+        "value": "61b68373-3ff9-4a2b-a528-cdc38cbc1295edd0e9",
+        "domain": "m.stripe.com",
+        "path": "/",
+        "expires": "2027-11-02T19:30:56.864Z",
+        "size": 43,
+        "httpOnly": true,
+        "secure": true,
+        "session": false,
+        "sameSite": "None",
+        "priority": "Medium",
+        "sameParty": false,
+        "sourceScheme": "Secure",
+        "sourcePort": 443,
+        "type": "unknown",
+        "third_party": true
+      },
+      {
+        "name": "__stripe_mid",
+        "value": "0b160cbe-f2af-4874-93b9-f0e3c668ab20213749",
+        "domain": "edition.cnn.com",
+        "path": "/",
+        "expires": "2027-09-28T19:30:56.000Z",
+        "size": 54,
+        "httpOnly": false,
+        "secure": true,
+        "session": false,
+        "sameSite": "Strict",
+        "priority": "Medium",
+        "sameParty": false,
+        "sourceScheme": "Secure",
+        "sourcePort": 443,
+        "type": "unknown",
+        "third_party": false
+      },
+      {
+        "name": "__stripe_sid",
+        "value": "321cd7be-e534-4f5e-8225-f4e6f4dec6e7ff82ef",
+        "domain": "edition.cnn.com",
+        "path": "/",
+        "expires": "2026-09-28T20:00:56.000Z",
+        "size": 54,
+        "httpOnly": false,
+        "secure": true,
+        "session": false,
+        "sameSite": "Strict",
+        "priority": "Medium",
+        "sameParty": false,
+        "sourceScheme": "Secure",
+        "sourcePort": 443,
+        "type": "unknown",
+        "third_party": false
+      }
+    ],
+    "fb_pixel_events": [],
+    "tiktok_pixel_events": [],
+    "twitter_pixel_events": [],
+    "google_analytics_events": [],
+    "key_logging": {},
+    "session_recorders": {},
+    "third_party_trackers": [
+      {
+        "data": {
+          "body": {},
+          "filter": "||imasdk.googleapis.com^",
+          "listName": "easylist.txt",
+          "query": {}
+        },
+        "stack": [
+          {
+            "fileName": "https://edition.cnn.com/",
+            "source": "ThirdPartyTracker RequestHandler"
+          }
+        ],
+        "type": "TrackingRequest",
+        "url": "https://imasdk.googleapis.com/js/sdkloader/ima3.js"
+      },
+      {
+        "data": {
+          "body": {},
+          "filter": "||optimizely.com^$third-party",
+          "listName": "easyprivacy.txt",
+          "query": {}
+        },
+        "stack": [
+          {
+            "fileName": "https://edition.cnn.com/",
+            "source": "ThirdPartyTracker RequestHandler"
+          }
+        ],
+        "type": "TrackingRequest",
+        "url": "https://cdn.optimizely.com/public/125375509/s/landingprod.js"
+      }
+    ]
+  }
+}

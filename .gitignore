@@ -6,3 +6,6 @@ node_modules/
 Thumbs.db
 desktop.ini
 *.tmp
+
+# HAR originais (com cookies e tokens); os públicos são os sanitizados
+*_original.har
