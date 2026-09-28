@@ -78,6 +78,111 @@ function onCommitted(details) {
   PL.log('pagina comprometida na aba', details.tabId, rec.pageDomain);
 }
 
+// ---------------------------------------------------------------- mensagens
+
+/**
+ * Roteador de mensagens (runtime.onMessage). Cada modulo registra o tratador
+ * do seu tipo com PL.onMensagem('tipo', fn). O content script envia 'storage'
+ * e 'pagina' (eventos do inject.js); o popup usa tipos proprios.
+ */
+PL.mensagens = {};
+
+PL.onMensagem = function (tipo, fn) {
+  PL.mensagens[tipo] = fn;
+};
+
+/** Tratadores dos eventos do script de pagina, pelo campo evento.tipo. */
+PL.eventosPagina = {};
+
+PL.onEventoPagina = function (tipo, fn) {
+  PL.eventosPagina[tipo] = fn;
+};
+
+/**
+ * Registro da aba ao qual uma mensagem do content script pertence, ou null
+ * se ela for de um documento que ja nao esta na tela:
+ *   - coletada antes do inicio da navegacao atual (ts < startedAt);
+ *   - navegacao em andamento (o documento antigo ainda envia mensagens);
+ *   - frame de topo de outro dominio.
+ */
+PL.registroDoRemetente = function (msg, sender) {
+  if (!sender || !sender.tab || sender.tab.id === undefined) return null;
+  var rec = PL.state.get(sender.tab.id);
+  if (!rec || !rec.pageDomain || rec.mainPending) return null;
+  if (typeof msg.ts === 'number' && msg.ts < rec.startedAt) return null;
+  if (sender.frameId === 0 && PL.domainOf(sender.url || msg.url) !== rec.pageDomain) return null;
+  return rec;
+};
+
+function onMessage(msg, sender) {
+  if (!msg || typeof msg.tipo !== 'string') return undefined;
+  var fn = PL.mensagens[msg.tipo];
+  if (!fn) return undefined;
+  return fn(msg, sender);
+}
+
+// ---------------------------------------------------------------- storage HTML5
+
+var STORAGE_ORIGENS_LIMITE = 200;
+var STORAGE_BANCOS_LIMITE = 50;
+
+/**
+ * Armazenamento HTML5 observado pelo content script, agrupado pela origem
+ * do frame. Frames da mesma origem compartilham o mesmo armazenamento, entao
+ * a coleta mais recente substitui a anterior; o pico de bytes e mantido.
+ */
+function onStorage(msg, sender) {
+  var rec = PL.registroDoRemetente(msg, sender);
+  if (!rec || !msg.dados) return;
+  var origem = typeof msg.origem === 'string' ? msg.origem : 'null';
+  var st = rec.storage.get(origem);
+  if (!st) {
+    if (rec.storage.size >= STORAGE_ORIGENS_LIMITE) return;
+    var dominio = origem === 'null' ? '' : PL.domainOf(origem);
+    st = {
+      origem: origem,
+      dominio: dominio,
+      terceiraParte: !!dominio && dominio !== rec.pageDomain,
+      topo: false,
+      frames: new Set(),
+      coletas: 0,
+      picoBytesLocal: 0,
+      picoBytesSessao: 0,
+      bancosIndexedDB: new Set()
+    };
+    rec.storage.set(origem, st);
+  }
+  var d = msg.dados;
+  st.terceiraParte = !!st.dominio && st.dominio !== rec.pageDomain;
+  if (sender.frameId === 0) st.topo = true;
+  st.frames.add(sender.frameId);
+  st.coletas++;
+  st.ultimaColeta = msg.ts;
+  st.momento = String(msg.momento || '');
+  st.localStorage = d.localStorage || null;
+  st.sessionStorage = d.sessionStorage || null;
+  st.indexedDB = d.indexedDB || null;
+  st.documentCookie = d.documentCookie || null;
+  if (d.localStorage) st.picoBytesLocal = Math.max(st.picoBytesLocal, d.localStorage.bytes || 0);
+  if (d.sessionStorage) st.picoBytesSessao = Math.max(st.picoBytesSessao, d.sessionStorage.bytes || 0);
+  if (d.indexedDB && Array.isArray(d.indexedDB.bancos)) {
+    d.indexedDB.bancos.forEach(function (b) {
+      if (st.bancosIndexedDB.size < STORAGE_BANCOS_LIMITE) st.bancosIndexedDB.add(String(b));
+    });
+  }
+}
+
+/** Eventos do inject.js (repassados pelo content script). */
+function onPagina(msg, sender) {
+  var ev = msg.evento;
+  if (!ev || typeof ev.tipo !== 'string') return;
+  var fn = PL.eventosPagina[ev.tipo];
+  if (!fn) return;
+  var rec = PL.registroDoRemetente(msg, sender);
+  if (!rec) return;
+  fn(rec, ev, msg, sender);
+}
+
 PL.init = function () {
   // erros nao capturados em qualquer modulo tambem vao para a aba "Erros"
   window.addEventListener('error', function (ev) {
@@ -103,6 +208,10 @@ PL.init = function () {
       PL.warn('falha ao registrar o modulo ' + m[0] + ':', e);
     }
   });
+
+  PL.onMensagem('storage', onStorage);
+  PL.onMensagem('pagina', onPagina);
+  browser.runtime.onMessage.addListener(PL.guard('main.onMessage', onMessage));
 
   browser.webNavigation.onCommitted.addListener(PL.guard('main.onCommitted', onCommitted));
   browser.tabs.onRemoved.addListener(PL.guard('main.onTabRemoved', function (tabId) {
