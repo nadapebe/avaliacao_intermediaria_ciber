@@ -131,6 +131,34 @@ p { margin: 4px 0; }
 html.em-aba body { max-height: none; margin: 0 auto; border: 1px solid var(--borda); }
 html.em-aba .conteudo { overflow: visible; }
 
+/* aba Terceiros: a coluna do botao nao espreme dominio e tipos */
+table.terceiros td:first-child { min-width: 9.5em; }
+table.terceiros td:nth-child(3) { min-width: 5.5em; word-break: normal; }
+
+/* lista de bloqueio */
+.linha { display: flex; align-items: center; gap: 6px; margin: 6px 0; }
+.campo {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-size: 12px;
+  padding: 4px 6px;
+  border: 1px solid var(--borda);
+  border-radius: 5px;
+}
+button.bloquear, button.remover {
+  font: inherit;
+  font-size: 11px;
+  padding: 2px 7px;
+  border: 1px solid #f5b8b3;
+  border-radius: 5px;
+  background: #ffebe9;
+  color: #a40e26;
+  cursor: pointer;
+  white-space: nowrap;
+}
+button.remover { border-color: var(--borda); background: #fff; color: var(--texto-suave); }
+
 details.pilha { margin-top: 3px; }
 details.pilha summary { cursor: pointer; font-size: 11px; color: var(--texto-suave); }
 details.pilha pre {

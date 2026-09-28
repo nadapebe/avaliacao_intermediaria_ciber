@@ -115,6 +115,15 @@ PL.registroDoRemetente = function (msg, sender) {
   return rec;
 };
 
+/**
+ * Mensagem vinda de uma pagina da propria extensao (popup), e nao de um
+ * content script num site: so essas podem ler relatorios ou mudar a lista
+ * de bloqueio.
+ */
+PL.mensagemDaExtensao = function (sender) {
+  return !!sender && sender.id === browser.runtime.id && /^moz-extension:/i.test(sender.url || '');
+};
+
 function onMessage(msg, sender) {
   if (!msg || typeof msg.tipo !== 'string') return undefined;
   var fn = PL.mensagens[msg.tipo];
@@ -304,7 +313,8 @@ PL.init = function () {
     ['cookies', PL.cookies],
     ['tracking', PL.tracking],
     ['hijack', PL.hijack],
-    ['report', PL.report]
+    ['report', PL.report],
+    ['blocklist', PL.blocklist]
   ];
   modulos.forEach(function (m) {
     if (!m[1] || typeof m[1].register !== 'function') {

@@ -58,6 +58,8 @@ var PL = window.PL || (window.PL = {});
   var REINDEXA_MS = 1000;
   var BOUNCE_CLIENTE_MAX_MS = 10000;
   var CORRIDA_COOKIE_MS = 3000;
+  // cancelamentos: lista de bloqueio (ABORT) e Enhanced Tracking Protection
+  var ERRO_BLOQUEIO = /NS_ERROR_(ABORT|TRACKING_URI|SOCIALTRACKING_URI|FINGERPRINTING_URI|CRYPTOMINING_URI|EMAILTRACKING_URI)/;
 
   // parametros de rastreamento (link decoration); utm_* por prefixo
   // (inclui a lista usada pela pagina "Query parameters" do DuckDuckGo)
@@ -319,7 +321,7 @@ var PL = window.PL || (window.PL = {});
 
   // ------------------------------------------------------------ deteccao
 
-  function registraSync(rec, info, dominioB, parametro, url, ts, token) {
+  function registraSync(rec, info, dominioB, parametro, url, ts, token, requestId) {
     var t = estado(rec);
     var tipo = info.dominio === rec.pageDomain ? 'vazamentoPrimeiraParte' : 'sincronismo';
     var chave = tipo + '|' + info.dominio + '|' + dominioB + '|' + info.nome;
@@ -335,6 +337,7 @@ var PL = window.PL || (window.PL = {});
       // o identificador sincronizado e mascarado tambem dentro da URL
       url: urlMascarada(url, token),
       valorAmostra: mascara(token),
+      requestId: requestId,
       ts: ts
     });
   }
@@ -416,7 +419,7 @@ var PL = window.PL || (window.PL = {});
    * busca de cookie sync (a revarredura de analisa(); ID compartilhado e
    * decoracao ja ficam completos na varredura online).
    */
-  function varre(rec, url, dominioB, ts, soSync) {
+  function varre(rec, url, dominioB, ts, soSync, requestId) {
     if (!dominioB || dominioB === rec.pageDomain || !url) return;
     var indice = indiceDe(rec, false);
     var pagina = tokensDaPagina(rec);
@@ -426,7 +429,7 @@ var PL = window.PL || (window.PL = {});
       tokensDe(cand.texto).forEach(function (tok) {
         var info = indice.get(tok);
         if (info && info.dominio && info.dominio !== dominioB) {
-          registraSync(rec, info, dominioB, cand.parametro, url, ts, tok);
+          registraSync(rec, info, dominioB, cand.parametro, url, ts, tok, requestId);
         }
         if (!soSync && cand.naQuery && !cand.ehUrl && !PARAMETROS_NAO_ID.test(cand.parametro) &&
             idForte(tok) && !pagina.has(tok.toLowerCase())) {
@@ -561,7 +564,7 @@ var PL = window.PL || (window.PL = {});
       return;
     }
     if (!r.info.terceira) return;
-    varre(rec, details.url, r.info.dominio, details.timeStamp || Date.now());
+    varre(rec, details.url, r.info.dominio, details.timeStamp || Date.now(), false, details.requestId);
   }
 
   /** Valores enviados no header Cookie: entram no indice de cookie sync. */
@@ -619,10 +622,18 @@ var PL = window.PL || (window.PL = {});
     var assinatura = assinaturaDoIndice(rec);
     if (assinatura !== t.assinaturaVarrida) {
       rec.requestLog.forEach(function (e) {
-        if (e.terceiraParte && e.tipo !== 'main_frame') varre(rec, e.url, e.dominio, e.ts, true);
+        if (e.terceiraParte && e.tipo !== 'main_frame') varre(rec, e.url, e.dominio, e.ts, true, e.requestId);
       });
       t.assinaturaVarrida = assinatura;
     }
+    // sync cuja requisicao foi cancelada (Firefox ou lista de bloqueio): o
+    // identificador nunca chegou a B; fica no relatorio, fora da contagem
+    var erroPorRequisicao = new Map();
+    rec.requestLog.forEach(function (e) { if (e.erro) erroPorRequisicao.set(e.requestId, e.erro); });
+    rec.sync.forEach(function (s) {
+      var erro = s.requestId ? erroPorRequisicao.get(s.requestId) : '';
+      s.bloqueada = !!erro && ERRO_BLOQUEIO.test(erro);
+    });
     rec.bounce = calculaBounce(rec);
     rec.decoration = decoracaoDaNavegacao(rec).concat(estado(rec).decoracaoRequisicoes);
     return resumo(rec);
@@ -641,6 +652,7 @@ var PL = window.PL || (window.PL = {});
     if (!rec) return r;
     var pares = new Set();
     rec.sync.forEach(function (s) {
+      if (s.bloqueada) return;
       if (s.tipo === 'sincronismo') {
         r.sincronismos++;
         pares.add(s.de + '>' + s.para);

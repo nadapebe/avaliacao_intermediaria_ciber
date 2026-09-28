@@ -220,6 +220,7 @@ var PL = window.PL || (window.PL = {});
     var pares = [];
     var ids = 0;
     rec.sync.forEach(function (s) {
+      if (s.bloqueada) return; // a requisicao foi cancelada: nada chegou a B
       if (s.tipo === 'sincronismo') {
         var par = s.de + ' -> ' + s.para;
         if (pares.indexOf(par) < 0) pares.push(par);

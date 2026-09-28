@@ -410,8 +410,11 @@ var PL = window.PL || (window.PL = {});
       if (e.terceiraParte && !e.erro) verificaHost(e.url, e.dominio);
     });
     rec.thirdParties.forEach(function (st, dominio) {
-      // dominio com todas as requisicoes bloqueadas pelo Firefox: nada foi gravado
-      if (st.requisicoes <= (st.bloqueadasFirefox || 0)) return;
+      // dominio com todas as requisicoes bloqueadas (pelo Firefox ou pela lista
+      // do PrivacyLens): nada chegou ao servidor, nada foi gravado
+      var bloqueadas = (st.bloqueadasFirefox || 0) +
+        ((rec.blocked && rec.blocked.byDomain && rec.blocked.byDomain.get(dominio)) || 0);
+      if (st.requisicoes <= bloqueadas) return;
       st.exemplos.forEach(function (u) { verificaHost(u, dominio); });
     });
     teclado.forEach(function (k, dominio) {

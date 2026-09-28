@@ -42,9 +42,8 @@ var PL = window.PL || (window.PL = {});
     return v ? v.slice(0, 4) + '...(' + v.length + ' caracteres)' : '';
   }
 
-  /** Mensagem vinda de uma pagina da propria extensao (popup), e nao de um site. */
   function daExtensao(sender) {
-    return !!sender && sender.id === browser.runtime.id && /^moz-extension:/i.test(sender.url || '');
+    return PL.mensagemDaExtensao(sender);
   }
 
   // ------------------------------------------------------------ secoes

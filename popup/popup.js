@@ -18,11 +18,12 @@
     ['fingerprint', 'Fingerprint'],
     ['rastreio', 'Rastreio'],
     ['hijacking', 'Hijacking'],
+    ['bloqueio', 'Bloqueio'],
     ['erros', 'Erros']
   ];
   var LINHAS_LIMITE = 300;
 
-  var estado = { tabId: null, relatorio: null, aba: 'resumo' };
+  var estado = { tabId: null, relatorio: null, aba: 'resumo', bloqueio: null, avisoBloqueio: '', rascunho: '' };
 
   // popup.html?tabId=N: o relatorio aberto numa aba normal, em altura livre
   // (usado para prints de pagina inteira no relatorio do trabalho)
@@ -140,13 +141,41 @@
       return browser.runtime.sendMessage({ tipo: 'relatorio', tabId: estado.tabId });
     }).then(function (r) {
       estado.relatorio = r || null;
+      return mensagemBloqueio({ acao: 'estado' });
+    }).then(function () {
       renderiza();
+      var r = estado.relatorio;
       status(r && !r.erroRelatorio ? 'atualizado às ' + new Date().toLocaleTimeString() : '');
     }).catch(function (e) {
       estado.relatorio = null;
       renderiza();
       status('erro: ' + (e && e.message || e));
     });
+  }
+
+  /** Envia uma acao da lista de bloqueio e guarda o estado devolvido. */
+  function mensagemBloqueio(msg) {
+    msg.tipo = 'bloqueio';
+    return browser.runtime.sendMessage(msg).then(function (res) {
+      if (res && res.estado) estado.bloqueio = res.estado;
+      estado.avisoBloqueio = res && !res.ok ? res.erro : '';
+      return res;
+    }).catch(function (e) {
+      estado.avisoBloqueio = 'falha: ' + (e && e.message || e);
+    });
+  }
+
+  /** Acao na lista feita pela interface: atualiza a tela e avisa para recarregar. */
+  function acaoBloqueio(msg, aviso) {
+    return mensagemBloqueio(msg).then(function (res) {
+      if (res && res.ok && aviso) status(aviso);
+      renderiza();
+    });
+  }
+
+  function naLista(dominio) {
+    var b = estado.bloqueio;
+    return !!b && b.regras.some(function (x) { return x.padrao === dominio && x.ativo; });
   }
 
   function abrirEmAba() {
@@ -184,6 +213,7 @@
       case 'fingerprint': return r.fingerprint.canvas.length + r.fingerprint.vetores.length;
       case 'rastreio': return r.rastreamento.sync.length + r.rastreamento.bounce.length + r.rastreamento.decoracao.length;
       case 'hijacking': return r.hijack.indicios.length;
+      case 'bloqueio': return r.bloqueio ? r.bloqueio.total : 0;
       case 'erros': return r.erros.length;
       default: return null;
     }
@@ -216,6 +246,12 @@
     alvo.textContent = '';
     var pagina = document.getElementById('pagina');
 
+    if ((!r || r.erroRelatorio) && estado.aba === 'bloqueio') {
+      pagina.textContent = 'sem dados desta aba';
+      adiciona(alvo, secaoBloqueio(null));
+      return;
+    }
+
     if (!r || r.erroRelatorio) {
       pagina.textContent = 'sem dados';
       adiciona(alvo, [
@@ -237,6 +273,7 @@
       fingerprint: secaoFingerprint,
       rastreio: secaoRastreio,
       hijacking: secaoHijacking,
+      bloqueio: secaoBloqueio,
       erros: secaoErros
     };
     adiciona(alvo, (secoes[estado.aba] || secaoResumo)(r));
@@ -348,14 +385,25 @@
       if (t.bloqueadasFirefox) selos.push(selo('ETP bloqueou ' + t.bloqueadasFirefox, 'ok', 'Requisições canceladas pelo Enhanced Tracking Protection do Firefox'));
       if (t.bloqueadasPlugin) selos.push(selo('bloqueado ' + t.bloqueadasPlugin, 'ok', 'Requisições canceladas pela lista de bloqueio do PrivacyLens'));
       t.classificacaoFirefox.forEach(function (c) { selos.push(selo(c, 'info', 'Classificação do Firefox')); });
+      var botao;
+      if (naLista(t.dominio)) {
+        botao = selo('na lista', 'ok', 'Já está na lista de bloqueio (vale a partir do próximo carregamento)');
+      } else {
+        botao = el('button', { type: 'button', class: 'bloquear', title: 'Adiciona ' + t.dominio + ' à lista de bloqueio' }, 'Bloquear');
+        botao.addEventListener('click', function () {
+          acaoBloqueio({ acao: 'adicionar', padrao: t.dominio },
+            t.dominio + ' bloqueado. Recarregue a página para medir de novo.');
+        });
+      }
       return [
         el('div', null, [el('strong', { class: 'quebra' }, t.dominio), el('div', { class: 'suave pequeno quebra', title: t.exemplos.join('\n') }, curto(t.exemplos[0], 55))]),
         num(t.requisicoes),
         el('span', { class: 'pequeno' }, t.tipos.join(', ')),
-        selos
+        selos,
+        botao
       ];
     });
-    return [cab, tabela(['Domínio', { texto: 'Req.', classe: 'num' }, 'Tipos', 'Sinais'], linhas)];
+    return [cab, tabela(['Domínio', { texto: 'Req.', classe: 'num' }, 'Tipos', 'Sinais', ''], linhas, 'terceiros')];
   }
 
   // ------------------------------------------------------------ Cookies
@@ -506,10 +554,13 @@
         ]);
       }
       var vaz = s.tipo === 'vazamentoPrimeiraParte';
-      return el('div', { class: 'cartao ' + (vaz ? 'baixa' : 'media') }, [
+      return el('div', { class: 'cartao ' + (vaz || s.bloqueada ? 'baixa' : 'media') }, [
         el('div', { class: 'cabeca' }, [
           el('span', { class: 'quebra' }, s.de + ' → ' + s.para),
-          vaz ? selo('ID de 1ª parte vazado') : selo('cookie sync', 'alerta')
+          el('span', null, [
+            vaz ? selo('ID de 1ª parte vazado') : selo('cookie sync', 'alerta'),
+            s.bloqueada ? selo('requisição bloqueada', 'ok', 'A requisição foi cancelada: o identificador não chegou ao destino') : null
+          ])
         ]),
         el('div', { class: 'pequeno quebra' }, 'cookie "' + s.cookie + '" no parâmetro "' + s.parametro + '" (' + s.valorAmostra + ')'),
         el('div', { class: 'suave pequeno quebra' }, curto(s.url, 90))
@@ -575,6 +626,82 @@
         ]);
       })
     );
+  }
+
+  // ------------------------------------------------------------ Bloqueio
+
+  function secaoBloqueio(r) {
+    var b = estado.bloqueio;
+    if (!b) {
+      return estado.avisoBloqueio ?
+        el('p', { class: 'pequeno nao' }, 'Não foi possível ler a lista de bloqueio: ' + estado.avisoBloqueio) :
+        vazio('Carregando a lista de bloqueio...');
+    }
+
+    var geral = el('input', { type: 'checkbox', id: 'bloqueioGeral' });
+    geral.checked = b.ativo;
+    geral.addEventListener('change', function () {
+      acaoBloqueio({ acao: 'geral', ativo: geral.checked },
+        geral.checked ? 'Bloqueio ligado.' : 'Bloqueio desligado: o PrivacyLens só observa.');
+    });
+
+    var campo = el('input', { type: 'text', id: 'novoPadrao', placeholder: 'ex.: doubleclick.net ou *.hotjar.com', class: 'campo' });
+    campo.value = estado.rascunho; // o texto digitado sobrevive a uma regra invalida
+    campo.addEventListener('input', function () { estado.rascunho = campo.value; });
+    var adicionar = el('button', { type: 'button', class: 'bloquear' }, 'Adicionar');
+    function adicionarPadrao() {
+      var texto = campo.value;
+      if (!texto.trim()) return;
+      estado.rascunho = texto;
+      mensagemBloqueio({ acao: 'adicionar', padrao: texto }).then(function (res) {
+        if (res && res.ok) {
+          estado.rascunho = '';
+          status('Regra adicionada. Vale para as próximas requisições; recarregue a página para medir de novo.');
+        } else {
+          status('');
+        }
+        renderiza();
+        var novo = document.getElementById('novoPadrao');
+        if (novo) novo.focus();
+      });
+    }
+    adicionar.addEventListener('click', adicionarPadrao);
+    campo.addEventListener('keydown', function (ev) { if (ev.key === 'Enter') adicionarPadrao(); });
+
+    var regras = b.regras.map(function (x) {
+      var liga = el('input', { type: 'checkbox', title: 'Ligar/desligar esta regra' });
+      liga.checked = x.ativo;
+      liga.addEventListener('change', function () {
+        acaoBloqueio({ acao: 'alternar', padrao: x.padrao, ativo: liga.checked });
+      });
+      var remover = el('button', { type: 'button', class: 'remover', title: 'Remover da lista' }, '×');
+      remover.addEventListener('click', function () {
+        acaoBloqueio({ acao: 'remover', padrao: x.padrao }, x.padrao + ' removido da lista.');
+      });
+      return [liga, el('strong', { class: 'quebra' + (x.ativo ? '' : ' suave') }, x.padrao), num(x.bloqueiosSessao), remover];
+    });
+
+    var nestaAba = r && r.bloqueio ? r.bloqueio : null;
+    var porDominio = nestaAba ? nestaAba.porDominio.map(function (d) {
+      return [el('span', { class: 'quebra' }, d.dominio), num(d.bloqueadas)];
+    }) : [];
+
+    return [
+      el('p', { class: 'suave pequeno' }, 'Por padrão o PrivacyLens só observa. As regras abaixo cancelam as requisições ' +
+        'que casarem (exceto a navegação principal). Um domínio vale também para os subdomínios; use * como curinga.'),
+      el('label', { class: 'linha' }, [geral, ' Bloqueio ', el('strong', null, b.ativo ? 'ligado' : 'desligado')]),
+      el('div', { class: 'linha' }, [campo, adicionar]),
+      estado.avisoBloqueio ? el('p', { class: 'pequeno nao' }, estado.avisoBloqueio) : null,
+      el('h2', null, 'Regras (' + b.regras.length + ')'),
+      regras.length ? tabela(['', 'Domínio ou padrão', { texto: 'Bloqueios*', classe: 'num' }, ''], regras) :
+        vazio('Lista vazia. Adicione aqui ou use "Bloquear" na aba Terceiros.'),
+      el('p', { class: 'suave pequeno' }, '* desde que o Firefox abriu. Total nesta sessão: ' + b.totalSessao + '.'),
+      el('h2', null, 'Bloqueado nesta página'),
+      nestaAba ? (porDominio.length ? [el('p', null, nestaAba.total + ' requisições canceladas.'),
+        tabela(['Domínio', { texto: 'Requisições', classe: 'num' }], porDominio)] :
+        vazio('Nenhuma requisição desta página foi bloqueada.')) :
+        vazio('Sem dados desta aba.')
+    ];
   }
 
   // ------------------------------------------------------------ Erros

@@ -31,6 +31,7 @@
       "background/hijack.js",
       "background/score.js",
       "background/report.js",
+      "background/blocklist.js",
       "background/main.js"
     ],
     "persistent": true
