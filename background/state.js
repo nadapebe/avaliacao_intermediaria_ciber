@@ -94,6 +94,16 @@ var PL = window.PL || (window.PL = {});
       return rec;
     },
 
+    /**
+     * Devolve a aba um registro anterior. Usado quando uma navegacao de
+     * main_frame nao chega a ser efetivada (download, resposta 204, usuario
+     * clicou em Parar): a pagina anterior continua na tela, e seus dados tambem.
+     */
+    restore: function (tabId, rec) {
+      if (rec) tabs.set(tabId, rec);
+      return rec;
+    },
+
     remove: function (tabId) {
       tabs.delete(tabId);
     },
