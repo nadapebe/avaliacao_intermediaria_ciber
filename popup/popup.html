@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>PrivacyLens</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="topo">
+    <img class="logo" src="../icons/icon.svg" alt="" width="28" height="28">
+    <div class="titulo">
+      <strong>PrivacyLens</strong>
+      <span id="pagina" class="pagina">carregando...</span>
+    </div>
+  </header>
+
+  <nav id="abas" class="abas" aria-label="Secoes do relatorio"></nav>
+
+  <main id="conteudo" class="conteudo"></main>
+
+  <footer class="rodape">
+    <button id="atualizar" type="button">Atualizar</button>
+    <button id="exportar" type="button" class="primario">Exportar JSON</button>
+    <button id="emAba" type="button" title="Abre este relatório numa aba, em altura livre, para prints">Abrir em aba</button>
+    <span id="status" class="status" role="status"></span>
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>

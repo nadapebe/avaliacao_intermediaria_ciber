@@ -160,47 +160,47 @@ var PL = window.PL || (window.PL = {});
     // 1. dominios de terceira parte
     var terceiros = terceirosContatados(rec);
     var n1 = terceiros.length;
-    criterio('terceiros', 'Dominios de 3a parte contatados', 15, n1,
+    criterio('terceiros', 'Domínios de 3ª parte contatados', 15, n1,
       n1 ? lista(terceiros, 8) : 'nenhum',
       3 * Math.log2(1 + n1),
       'min(15, 3 * log2(1 + n))',
-      'Superficie de exposicao: cada terceiro recebe IP, User-Agent e a pagina visitada. ' +
-      'Escala logaritmica porque o primeiro terceiro pesa muito mais que o trigesimo ' +
+      'Superfície de exposição: cada terceiro recebe IP, User-Agent e a página visitada. ' +
+      'Escala logarítmica porque o primeiro terceiro pesa muito mais que o trigésimo ' +
       '(a penalidade atinge o teto em 31 terceiros).');
 
     // 2. cookies de terceira parte persistentes
     var c3p = cookiesValidos(rec, function (c) { return c.terceiraParte && c.persistente; });
-    criterio('cookies3p', 'Cookies de 3a parte persistentes', 20, c3p.length,
+    criterio('cookies3p', 'Cookies de 3ª parte persistentes', 20, c3p.length,
       c3p.length ? lista(c3p.map(function (c) { return c.nome + ' (' + c.dominioRegistravel + ')'; })) : 'nenhum',
       4 * c3p.length,
       'min(20, 4 * n)',
-      'Identificador estavel entre sites: o mecanismo classico de rastreamento.');
+      'Identificador estável entre sites: o mecanismo clássico de rastreamento.');
 
     // 3. cookies de primeira parte de longa duracao
     var c1p = cookiesValidos(rec, function (c) { return !c.terceiraParte && c.persistente && c.longoPrazo; });
-    criterio('cookies1pLongos', 'Cookies de 1a parte persistentes > 90 dias', 5, c1p.length,
+    criterio('cookies1pLongos', 'Cookies de 1ª parte persistentes > 90 dias', 5, c1p.length,
       c1p.length ? lista(c1p.map(function (c) { return c.nome + ' (' + Math.round(c.duracaoDias) + ' dias)'; })) : 'nenhum',
       1 * c1p.length,
       'min(5, 1 * n)',
-      'Cookie de primeira parte de longa duracao funciona como identificador do visitante ' +
-      '(ex.: _ga, _fbp), lido por scripts de terceiros embutidos na pagina.');
+      'Cookie de primeira parte de longa duração funciona como identificador do visitante ' +
+      '(ex.: _ga, _fbp), lido por scripts de terceiros embutidos na página.');
 
     // 4. armazenamento HTML5 de terceira parte
     var s3p = storageTerceiros(rec);
-    criterio('storage3p', 'Storage HTML5 de 3a parte (em iframe)', 10, s3p.length,
+    criterio('storage3p', 'Storage HTML5 de 3ª parte (em iframe)', 10, s3p.length,
       s3p.length ? lista(s3p) : 'nenhum',
       3 * s3p.length,
       'min(10, 3 * n)',
-      'Persistencia fora do ciclo de vida do cookie: sobrevive a limpeza de cookies ' +
-      'e nao e controlada pelas preferencias de cookie.');
+      'Persistência fora do ciclo de vida do cookie: sobrevive à limpeza de cookies ' +
+      'e não é controlada pelas preferências de cookie.');
 
     // 5. volume de localStorage de primeira parte
     var bytes = bytesLocalPrimeira(rec);
-    criterio('localStorage1p', 'Volume de localStorage de 1a parte', 5, bytes,
+    criterio('localStorage1p', 'Volume de localStorage de 1ª parte', 5, bytes,
       Math.round(bytes / 1024) + ' KB',
       bytes / KB50,
       'min(5, bytes / 50 KB)',
-      'Proxy de supercookie / estado excessivo guardado no navegador do usuario.');
+      'Indicador de supercookie ou de estado excessivo guardado no navegador do usuário.');
 
     // 6. canvas fingerprinting
     var canvasFp = rec.fingerprint.canvas.filter(function (c) { return c.fingerprint; });
@@ -210,11 +210,11 @@ var PL = window.PL || (window.PL = {});
       if (scriptsCanvas.indexOf(s) < 0) scriptsCanvas.push(s);
     });
     criterio('canvas', 'Canvas fingerprinting', 15, canvasFp.length > 0,
-      canvasFp.length ? 'por ' + lista(scriptsCanvas) : 'nao detectado',
+      canvasFp.length ? 'por ' + lista(scriptsCanvas) : 'não detectado',
       canvasFp.length ? 15 : 0,
-      'binario: 15 se detectado',
-      'Identificacao sem consentimento e sem estado: nao e removida limpando cookies ' +
-      'e o usuario nao consegue evitar.');
+      'binário: 15 se detectado',
+      'Identificação sem consentimento e sem estado: não é removida limpando cookies ' +
+      'e o usuário não consegue evitar.');
 
     // 7. cookie sync e bounce tracking
     var pares = [];
@@ -237,30 +237,30 @@ var PL = window.PL || (window.PL = {});
     }
     criterio('sync', 'Cookie sync / bounce tracking', 15,
       { sincronismos: nSync, bounce: bounces.length > 0 },
-      detalheSync.length ? detalheSync.join('; ') : 'nao detectado',
+      detalheSync.length ? detalheSync.join('; ') : 'não detectado',
       8 * nSync + (bounces.length ? 15 : 0),
       '8 por sync distinto, +15 se houver bounce, teto 15',
-      'Une as identidades do usuario em dominios diferentes, anulando o isolamento ' +
+      'Une as identidades do usuário em domínios diferentes, anulando o isolamento ' +
       'de cookies por site.');
 
     // 8. hijacking / hook
     var hijack = rec.hijack.filter(function (i) {
       return TIPOS_SESSAO.indexOf(i.tipo) < 0 && SEVERIDADES_PENALIZADAS.indexOf(i.severidade) >= 0;
     });
-    criterio('hijack', 'Indicios de hijacking / hook', 10, hijack.length,
+    criterio('hijack', 'Indícios de hijacking / hook', 10, hijack.length,
       hijack.length ? lista(hijack.map(function (i) { return i.tipo + ' (' + i.dominio + ', ' + i.severidade + ')'; })) : 'nenhum',
       5 * hijack.length,
-      '5 por indicio de severidade media ou alta, teto 10',
-      'Vai alem do rastreamento: e controle do navegador (canal de comando, ' +
-      'interceptacao de chamadas).');
+      '5 por indício de severidade média ou alta, teto 10',
+      'Vai além do rastreamento: é controle do navegador (canal de comando, ' +
+      'interceptação de chamadas).');
 
     // 9. session recording / keylogging
     var sessao = rec.hijack.filter(function (i) { return TIPOS_SESSAO.indexOf(i.tipo) >= 0; });
     criterio('sessao', 'Session recording / keylogging', 5, sessao.length > 0,
-      sessao.length ? lista(sessao.map(function (i) { return i.tipo + ' (' + i.dominio + ')'; })) : 'nao detectado',
+      sessao.length ? lista(sessao.map(function (i) { return i.tipo + ' (' + i.dominio + ')'; })) : 'não detectado',
       sessao.length ? 5 : 0,
-      'binario: 5 se detectado',
-      'Captura o conteudo digitado e os movimentos do usuario, nao so metadados.');
+      'binário: 5 se detectado',
+      'Captura o conteúdo digitado e os movimentos do usuário, não só metadados.');
 
     var totalPenalidades = 0;
     criterios.forEach(function (c) { totalPenalidades += c.penalidade; });

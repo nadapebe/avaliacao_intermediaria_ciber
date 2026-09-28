@@ -149,6 +149,20 @@ var PL = window.PL || (window.PL = {});
     return v.length > max ? v.slice(0, max) : v;
   }
 
+  /**
+   * URL com o identificador mascarado, inclusive na forma codificada
+   * (ex.: base64 com "+", "/" e "=" aparece como %2B, %2F e %3D na URL).
+   */
+  function urlMascarada(url, token) {
+    var m = mascara(token);
+    var u = String(url).split(token).join(m);
+    var enc = encodeURIComponent(token);
+    if (enc !== token) u = u.split(enc).join(m);
+    var mais = enc.replace(/%20/g, '+');
+    if (mais !== enc) u = u.split(mais).join(m);
+    return corta(u, 512);
+  }
+
   /** Pedacos de um valor: ele mesmo, pecas por ponto e juncoes de sufixo. */
   function pedacos(v) {
     var out = [v];
@@ -318,7 +332,8 @@ var PL = window.PL || (window.PL = {});
       cookie: info.nome,
       fonteCookie: info.fonte,
       parametro: corta(parametro, 128),
-      url: corta(url, 512),
+      // o identificador sincronizado e mascarado tambem dentro da URL
+      url: urlMascarada(url, token),
       valorAmostra: mascara(token),
       ts: ts
     });
@@ -345,7 +360,7 @@ var PL = window.PL || (window.PL = {});
     var visto = t.idsVistos.get(token);
     if (!visto) {
       if (t.idsVistos.size >= IDS_LIMITE && !despejaIdAntigo(t.idsVistos)) return;
-      visto = { dominios: new Set(), parametros: new Set(), registro: null, url: corta(url, 512), ts: ts };
+      visto = { dominios: new Set(), parametros: new Set(), registro: null, url: urlMascarada(url, token), ts: ts };
       t.idsVistos.set(token, visto);
     }
     visto.dominios.add(dominioB);

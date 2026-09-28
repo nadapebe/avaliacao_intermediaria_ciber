@@ -17,7 +17,8 @@
     "cookies",
     "storage",
     "tabs",
-    "webNavigation"
+    "webNavigation",
+    "downloads"
   ],
   "background": {
     "scripts": [
@@ -29,6 +30,7 @@
       "background/tracking.js",
       "background/hijack.js",
       "background/score.js",
+      "background/report.js",
       "background/main.js"
     ],
     "persistent": true
@@ -63,7 +65,8 @@
     "default_icon": {
       "48": "icons/icon.svg",
       "96": "icons/icon.svg"
-    }
+    },
+    "default_popup": "popup/popup.html"
   },
   "icons": {
     "48": "icons/icon.svg",
