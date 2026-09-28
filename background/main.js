@@ -24,7 +24,27 @@ PL.warn = function () {
   console.warn.apply(console, args);
 };
 
+/**
+ * Atualiza a URL e o dominio da pagina quando a navegacao e efetivada.
+ * NAO zera o registro: o reset acontece no onBeforeRequest de main_frame
+ * (background/requests.js), para que a cadeia de redirecionamentos de uma
+ * mesma navegacao sobreviva e possa ser analisada como bounce tracking.
+ */
+function onCommitted(details) {
+  if (details.frameId !== 0) return;
+  if (!/^https?:/.test(details.url)) return;
+  var rec = PL.state.getOrCreate(details.tabId, details.url);
+  if (!rec) return;
+  rec.pageUrl = details.url;
+  rec.pageDomain = PL.domainOf(details.url);
+  PL.log('pagina comprometida na aba', details.tabId, rec.pageDomain);
+}
+
 PL.init = function () {
+  browser.webNavigation.onCommitted.addListener(onCommitted);
+  browser.tabs.onRemoved.addListener(function (tabId) {
+    PL.state.remove(tabId);
+  });
   PL.log('background iniciado, versao', PL.VERSION);
 };
 
