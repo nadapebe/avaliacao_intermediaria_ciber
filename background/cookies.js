@@ -396,7 +396,8 @@ var PL = window.PL || (window.PL = {});
   /**
    * Resumo dos cookies para o popup, o score e o relatorio. A matriz
    * primeira/terceira x sessao/persistente conta apenas os cookies
-   * INJETADOS neste carregamento; os pre-existentes aparecem a parte.
+   * INJETADOS neste carregamento e efetivamente armazenados; os
+   * pre-existentes e os rejeitados pelo Firefox aparecem a parte.
    */
   function resumo(rec) {
     var agora = Date.now();
@@ -428,6 +429,9 @@ var PL = window.PL || (window.PL = {});
       classifica(rec, c, agora);
       if (c.removido) { r.removidos++; return; }
       if (!c.injetado) { r.preexistentes++; return; }
+      // o site tentou gravar, mas o Firefox rejeitou: fica fora da matriz
+      // (mesma regra do score)
+      if (c.armazenado === false) { r.naoArmazenados++; return; }
       r.injetados++;
       var parte = c.terceiraParte ? 'terceira' : 'primeira';
       var tipo = c.persistente ? 'persistente' : 'sessao';
@@ -441,7 +445,6 @@ var PL = window.PL || (window.PL = {});
       if (c.httpOnly) r.httpOnly++;
       if (c.secure) r.secure++;
       if (c.particionado) r.particionados++;
-      if (c.armazenado === false) r.naoArmazenados++;
       if (c.origem === 'http') r.viaHttp++;
       else if (c.origem === 'javascript') r.viaJavascript++;
     });

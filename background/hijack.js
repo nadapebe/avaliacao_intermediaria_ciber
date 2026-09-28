@@ -47,12 +47,23 @@ var PL = window.PL || (window.PL = {});
   var POLLING_REGULARIDADE = 0.7;
   var LISTA_LIMITE = 200;
 
-  // dominios conhecidos de gravacao de sessao (session replay)
+  // hosts conhecidos de gravacao de sessao (session replay): os provedores da
+  // lista de Princeton (2017) usada pelo Blacklight e outros atuais. Casam
+  // pelo host (ou sufixo), para que "mc.yandex.ru" nao pegue todo yandex.ru.
   var SESSION_RECORDING = [
     'hotjar.com', 'hotjar.io', 'clarity.ms', 'fullstory.com', 'smartlook.com', 'smartlook.cloud',
     'mouseflow.com', 'luckyorange.com', 'luckyorange.net', 'inspectlet.com', 'logrocket.com',
-    'lr-ingest.io', 'lr-in.com', 'contentsquare.net', 'quantummetric.com'
+    'lr-ingest.io', 'lr-in.com', 'contentsquare.net', 'quantummetric.com', 'sessioncam.com',
+    'clicktale.net', 'decibelinsight.net', 'mc.yandex.ru', 'mc.yandex.com', 'mc.webvisor.org'
   ];
+
+  function hostDeGravacao(host) {
+    for (var i = 0; i < SESSION_RECORDING.length; i++) {
+      var p = SESSION_RECORDING[i];
+      if (host === p || host.slice(-(p.length + 1)) === '.' + p) return p;
+    }
+    return '';
+  }
 
   var EVENTOS_TECLADO = ['keydown', 'keypress', 'keyup', 'input'];
   var EVENTOS_MOUSE = ['mousemove'];
@@ -387,14 +398,27 @@ var PL = window.PL || (window.PL = {});
     // session recording: dominio conhecido contatado, ou o mesmo terceiro
     // escutando teclado E mouse
     var gravadores = new Set();
+    var conhecidos = new Set();
+    function verificaHost(url, dominio) {
+      var p = hostDeGravacao(PL.hostOf(url));
+      if (p && !conhecidos.has(dominio)) {
+        conhecidos.add(dominio);
+        gravadores.add(dominio);
+      }
+    }
+    rec.requestLog.forEach(function (e) {
+      if (e.terceiraParte && !e.erro) verificaHost(e.url, e.dominio);
+    });
     rec.thirdParties.forEach(function (st, dominio) {
-      if (SESSION_RECORDING.indexOf(dominio) >= 0) gravadores.add(dominio);
+      // dominio com todas as requisicoes bloqueadas pelo Firefox: nada foi gravado
+      if (st.requisicoes <= (st.bloqueadasFirefox || 0)) return;
+      st.exemplos.forEach(function (u) { verificaHost(u, dominio); });
     });
     teclado.forEach(function (k, dominio) {
       if (mouse.has(dominio)) gravadores.add(dominio);
     });
     gravadores.forEach(function (dominio) {
-      var conhecido = SESSION_RECORDING.indexOf(dominio) >= 0;
+      var conhecido = conhecidos.has(dominio);
       indicios.push({
         tipo: 'sessionRecording',
         severidade: 'media',

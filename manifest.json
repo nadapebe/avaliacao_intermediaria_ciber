@@ -28,6 +28,7 @@
       "background/cookies.js",
       "background/tracking.js",
       "background/hijack.js",
+      "background/score.js",
       "background/main.js"
     ],
     "persistent": true

@@ -39,6 +39,8 @@ var PL = window.PL || (window.PL = {});
   var EXEMPLOS_LIMITE = 5;
   var URL_MAX = 4096;
   var CACHE_LIMITE = 5000;
+  // erros com que o Firefox (Enhanced Tracking Protection) cancela requisicoes
+  var ERRO_BLOQUEIO_FIREFOX = /NS_ERROR_(TRACKING|FINGERPRINTING|CRYPTOMINING|SOCIALTRACKING|EMAILTRACKING)_URI/;
   var EM_VOO_LIMITE = 5000;
   // espera apos o onCompleted do main_frame antes de concluir que a resposta
   // nao sera exibida (o onCompleted pode chegar antes do commit)
@@ -230,20 +232,21 @@ var PL = window.PL || (window.PL = {});
     if (!dominio) return;
 
     var terceira = details.type !== 'main_frame' && !!rec.pageDomain && dominio !== rec.pageDomain;
-    registraEmVoo(rec, details.requestId, { dominio: dominio, terceira: terceira, tipo: details.type });
-
-    rec.requests.total++;
-    if (terceira) rec.requests.thirdParty++;
-    else rec.requests.firstParty++;
-
-    registraLog(rec, {
+    var entrada = {
       url: cortaUrl(details.url),
       dominio: dominio,
       tipo: details.type,
       ts: ts,
       terceiraParte: terceira,
       requestId: details.requestId
-    });
+    };
+    registraEmVoo(rec, details.requestId, { dominio: dominio, terceira: terceira, tipo: details.type, log: entrada });
+
+    rec.requests.total++;
+    if (terceira) rec.requests.thirdParty++;
+    else rec.requests.firstParty++;
+
+    registraLog(rec, entrada);
 
     if (!terceira) return;
     var st = estatisticas(rec, dominio, ts);
@@ -338,6 +341,9 @@ var PL = window.PL || (window.PL = {});
     var rec = r.rec;
     rec.emVoo.delete(details.requestId);
     rec.requests.erros = (rec.requests.erros || 0) + 1;
+    // a entrada do log guarda o erro: permite distinguir requisicoes que
+    // nunca chegaram ao servidor (ex.: bloqueadas pelo Firefox)
+    if (r.info.log) r.info.log.erro = details.error || 'erro';
 
     if (details.type === 'main_frame' && rec.mainRequestId === details.requestId) {
       if (/NS_BINDING_(ABORTED|RETARGETED)/.test(details.error || '')) {
@@ -362,6 +368,8 @@ var PL = window.PL || (window.PL = {});
     var st = estatisticas(rec, r.info.dominio, details.timeStamp || Date.now());
     st.erros++;
     st.ultimoErro = details.error || '';
+    // bloqueada pelo Enhanced Tracking Protection: nenhum dado chegou ao terceiro
+    if (ERRO_BLOQUEIO_FIREFOX.test(details.error || '')) st.bloqueadasFirefox = (st.bloqueadasFirefox || 0) + 1;
   }
 
   function semFragmento(url) {
