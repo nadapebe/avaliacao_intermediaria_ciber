@@ -229,7 +229,7 @@ A **aplicação do score aos 3 sites reais** fica no relatório em PDF: tabela p
 7. **Atribuição por pilha de chamadas.** O script responsável é o primeiro quadro da pilha que não é do próprio plugin. Código que guardou uma referência antiga de uma API, ou que roda por `eval` sem URL, pode ser atribuído à própria página.
 8. **Outras extensões.** Ver o item 1 do protocolo (seção 7).
 9. **Requisições sem aba.** Requisições feitas por service workers ou pelo próprio navegador (`tabId = -1`) não são atribuídas a nenhuma página.
-10. **Storage pré-existente.** Diferente dos cookies, o armazenamento HTML5 lido pelo content script não distingue o que foi gravado nesta visita do que já existia. Por isso o protocolo usa janela privativa nova.
+10. **Storage pré-existente.** Diferente dos cookies, o armazenamento HTML5 lido pelo content script não distingue o que foi gravado nesta visita do que já existia. Por isso o protocolo usa perfil novo, ou os dados do site apagados, antes de cada medição (seção 7, item 3).
 11. **Limiares heurísticos.** Os limites de polling (5 requisições, mediana abaixo de 15 s, regularidade de 70%, duração de 30 s), de bounce no cliente (10 s) e de enumeração de fontes (20 famílias) são escolhas do projeto. Eles podem gerar falsos negativos (C2 lento e irregular) ou falsos positivos (heartbeats regulares de analytics, rotulados com severidade média).
 12. **Pesos.** Os pesos são um julgamento normativo, justificado na seção 2. Outra ponderação levaria a outra nota. Por isso o relatório exibe sempre a quebra completa, e não só o número final.
 

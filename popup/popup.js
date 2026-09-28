@@ -222,9 +222,10 @@
   function renderizaAbas() {
     var nav = document.getElementById('abas');
     nav.textContent = '';
-    var r = estado.relatorio && !estado.relatorio.erroRelatorio ? estado.relatorio : null;
+    var r = relatorioValido();
     ABAS.forEach(function (a) {
       var n = contadorDaAba(a[0], r);
+      if (!r && a[0] === 'erros' && estado.relatorio && estado.relatorio.erros) n = estado.relatorio.erros.length;
       var b = el('button', {
         type: 'button',
         role: 'tab',
@@ -239,20 +240,34 @@
     });
   }
 
+  /** Relatorio completo da aba, ou null (sem dados, erro ou ainda carregando). */
+  function relatorioValido() {
+    var r = estado.relatorio;
+    return r && !r.erroRelatorio && !r.semDados ? r : null;
+  }
+
   function renderiza() {
     renderizaAbas();
-    var r = estado.relatorio;
+    var r = relatorioValido();
+    var bruto = estado.relatorio;
     var alvo = document.getElementById('conteudo');
     alvo.textContent = '';
     var pagina = document.getElementById('pagina');
 
-    if ((!r || r.erroRelatorio) && estado.aba === 'bloqueio') {
+    // Bloqueio e Erros funcionam mesmo numa aba sem dados
+    if (!r && estado.aba === 'bloqueio') {
       pagina.textContent = 'sem dados desta aba';
       adiciona(alvo, secaoBloqueio(null));
       return;
     }
+    if (!r && estado.aba === 'erros' && bruto && bruto.erros) {
+      pagina.textContent = 'sem dados desta aba';
+      adiciona(alvo, secaoErros({ erros: bruto.erros }));
+      return;
+    }
 
-    if (!r || r.erroRelatorio) {
+    r = bruto;
+    if (!r || r.erroRelatorio || r.semDados) {
       pagina.textContent = 'sem dados';
       adiciona(alvo, [
         el('h2', null, 'Nenhum dado para esta aba'),

@@ -304,7 +304,10 @@ var PL = window.PL || (window.PL = {});
     if (!daExtensao(sender)) return undefined;
     var rec = PL.state.get(msg.tabId);
     return Promise.resolve().then(function () {
-      return rec ? monta(rec, false) : null;
+      if (rec) return monta(rec, false);
+      // aba sem dados (about:, pagina aberta antes do plugin): ainda assim a
+      // aba "Erros" do popup mostra as falhas do plugin
+      return { semDados: true, erros: PL.errors.map(function (e) { return { em: iso(e.ts), mensagem: e.mensagem }; }) };
     }).catch(function (e) {
       PL.warn('falha ao montar o relatorio:', e);
       return { erroRelatorio: String(e && e.message || e) };

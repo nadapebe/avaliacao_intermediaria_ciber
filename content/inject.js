@@ -33,7 +33,7 @@
  * interno PROPRIAS (wrapper -> original). Function.prototype.toString devolve
  * o texto da original para esses wrappers, para que a pagina nao mude de
  * comportamento por detectar a instrumentacao; a deteccao de hooks do site
- * (Etapa 9) exclui estas funcoes. Limitacao documentada em METODOLOGIA.md.
+ * (background/hijack.js) exclui estas funcoes. Limitacao documentada em METODOLOGIA.md.
  *
  * Robustez contra a pagina: todo nativo usado depois do carregamento (Set,
  * WeakMap, metodos de String, JSON, eventos) e salvo aqui, antes de qualquer
