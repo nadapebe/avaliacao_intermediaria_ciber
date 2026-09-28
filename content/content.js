@@ -152,6 +152,7 @@
     function aposLoad() {
       coletar('load');
       setTimeout(function () { coletar('load+3s'); }, ATRASO_TARDIO_MS);
+      observaScriptsInjetados();
     }
     if (document.readyState === 'complete') aposLoad();
     else window.addEventListener('load', aposLoad, { once: true });
@@ -164,6 +165,46 @@
       setTimeout(function () { coletar('bfcache'); }, 500);
       setTimeout(function () { coletar('bfcache+3s'); }, 500 + ATRASO_TARDIO_MS);
     });
+  }
+
+  // ------------------------------------------------------------ scripts injetados
+
+  var SCRIPTS_INJETADOS_LIMITE = 200;
+
+  /**
+   * <script src> adicionados ao DOM DEPOIS do load: carregamento dinamico
+   * de codigo, um dos indicios de hook/hijacking. O background descarta os
+   * de primeira parte.
+   */
+  function observaScriptsInjetados() {
+    if (typeof MutationObserver !== 'function') return;
+    var vistos = new Set();
+    function reporta(el) {
+      var src = '';
+      try { src = el.src || ''; } catch (e) { return; }
+      if (!src || vistos.has(src) || vistos.size >= SCRIPTS_INJETADOS_LIMITE) return;
+      vistos.add(src);
+      envia({ tipo: 'scriptInjetado', src: String(src).slice(0, 512) });
+    }
+    function verifica(no) {
+      if (!no || no.nodeType !== 1) return;
+      if (String(no.nodeName).toUpperCase() === 'SCRIPT') { // XHTML usa minusculas
+        reporta(no);
+      } else if (no.getElementsByTagName) {
+        var lista = no.getElementsByTagName('script');
+        for (var i = 0; i < lista.length; i++) reporta(lista[i]);
+      }
+    }
+    var obs = new MutationObserver(function (mutacoes) {
+      for (var i = 0; i < mutacoes.length; i++) {
+        var nos = mutacoes[i].addedNodes;
+        for (var j = 0; j < nos.length; j++) verifica(nos[j]);
+      }
+      if (vistos.size >= SCRIPTS_INJETADOS_LIMITE) obs.disconnect();
+    });
+    try {
+      obs.observe(document.documentElement || document, { childList: true, subtree: true });
+    } catch (e) { /* documento sem raiz */ }
   }
 
   // ------------------------------------------------------------ ponte

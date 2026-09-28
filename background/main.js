@@ -302,7 +302,8 @@ PL.init = function () {
   var modulos = [
     ['requests', PL.requests],
     ['cookies', PL.cookies],
-    ['tracking', PL.tracking]
+    ['tracking', PL.tracking],
+    ['hijack', PL.hijack]
   ];
   modulos.forEach(function (m) {
     if (!m[1] || typeof m[1].register !== 'function') {

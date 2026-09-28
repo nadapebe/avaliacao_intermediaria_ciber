@@ -80,6 +80,9 @@
   var _charCodeAt = String.prototype.charCodeAt;
   var _toLowerCase = String.prototype.toLowerCase;
   var _trim = String.prototype.trim;
+  var _setTimeout = setTimeout;
+  var _getPrototypeOf = Object.getPrototypeOf;
+  var _nodeName = (_getOwnPropertyDescriptor(Node.prototype, 'nodeName') || {}).get;
 
   var win = window;
   var doc = document;
@@ -87,7 +90,7 @@
 
   var EVENTO_PONTE = '__privacylens';
   var FILA_LIMITE = 500;
-  var EVENTOS_LIMITE = 300;
+  var EVENTOS_LIMITE = 500;
   var LEITURAS_POR_CANVAS = 20;
   var CHAMADAS_COM_PILHA = 200;
   var MIN_FP = 16;
@@ -128,13 +131,16 @@
   }
 
   /** Envia um evento ao content script (ou guarda ate a ponte ficar pronta). */
-  function emite(ev, chave) {
+  function emite(ev, chave, prioritario) {
     if (chave !== undefined) {
       if (setHas(enviados, chave)) return;
       setAdd(enviados, chave);
     }
-    if (totalEventos >= EVENTOS_LIMITE) return;
-    totalEventos++;
+    // eventos de hook nao disputam o limite (ja sao poucos pela deduplicacao)
+    if (!prioritario) {
+      if (totalEventos >= EVENTOS_LIMITE) return;
+      totalEventos++;
+    }
     var texto;
     try { texto = _stringify(ev); } catch (e) { return; }
     if (!pronto) {
@@ -211,15 +217,22 @@
    * new Error().stack: o primeiro quadro que nao seja deste script nem de
    * outra extensao. Sem URL de script: codigo inline da propria pagina.
    */
-  function scriptDeOrigem() {
+  function scriptDeOrigem(pularPrimeiro) {
     var linhas = _apply(_split, pilhaAtual(), ['\n']);
+    var primeiro = '';
     for (var i = 0; i < linhas.length; i++) {
       var url = urlDaLinha(linhas[i]);
       if (!url || url === PROPRIO) continue;
       if (sSlice(_apply(_toLowerCase, url, []), 0, 14) === 'moz-extension:') continue;
-      return url.length > 512 ? sSlice(url, 0, 512) : url;
+      if (url.length > 512) url = sSlice(url, 0, 512);
+      // pularPrimeiro: o primeiro script da pilha e um intermediario (ex.:
+      // biblioteca de monitoramento que envolveu a API); o autor real da
+      // chamada e o proximo script diferente dele, se houver
+      if (!pularPrimeiro) return url;
+      if (!primeiro) { primeiro = url; continue; }
+      if (url !== primeiro) return url;
     }
-    return paginaUrl;
+    return primeiro || paginaUrl;
   }
 
   // ------------------------------------------------------------ instrumentacao
@@ -288,7 +301,7 @@
       var original = desc.value;
       var p = new _Proxy(original, {
         construct: function (alvo, args, novoAlvo) {
-          try { aoCriar(); } catch (e) { /* nunca quebra a pagina */ }
+          try { aoCriar(args); } catch (e) { /* nunca quebra a pagina */ }
           return _construct(alvo, args, novoAlvo === p ? alvo : novoAlvo);
         }
       });
@@ -305,6 +318,49 @@
           value: p, writable: true, enumerable: false, configurable: true
         });
       } catch (e) { /* */ }
+    } catch (e) { /* segue sem este hook */ }
+  }
+
+  /**
+   * Objeto da cadeia de prototipos que define obj[prop] (no Firefox, fetch e
+   * open ficam no proprio window; XMLHttpRequest.prototype.open no prototipo).
+   */
+  function donoDe(obj, prop) {
+    var o = obj;
+    for (var i = 0; o && i < 10; i++) {
+      if (_getOwnPropertyDescriptor(o, prop)) return o;
+      o = _getPrototypeOf(o);
+    }
+    return null;
+  }
+
+  /** Substitui getter E setter de obj[prop]; "aoUsar" roda antes de ambos. */
+  function envolveAcessor(obj, prop, aoUsar) {
+    try {
+      if (!obj) return;
+      var desc = _getOwnPropertyDescriptor(obj, prop);
+      if (!desc || typeof desc.get !== 'function' || !desc.configurable) return;
+      var get = desc.get;
+      var set = desc.set;
+      var modelo = {
+        get [prop]() {
+          try { aoUsar(); } catch (e) { /* nunca quebra a pagina */ }
+          return _apply(get, this, []);
+        },
+        set [prop](v) {
+          try { aoUsar(); } catch (e) { /* nunca quebra a pagina */ }
+          if (set) _apply(set, this, [v]);
+        }
+      };
+      var novoDesc = _getOwnPropertyDescriptor(modelo, prop);
+      wmSet(PROPRIAS, novoDesc.get, get);
+      if (set) wmSet(PROPRIAS, novoDesc.set, set);
+      _defineProperty(obj, prop, {
+        get: novoDesc.get,
+        set: set ? novoDesc.set : undefined,
+        enumerable: desc.enumerable,
+        configurable: desc.configurable
+      });
     } catch (e) { /* segue sem este hook */ }
   }
 
@@ -535,6 +591,156 @@
   ['width', 'height', 'availWidth', 'availHeight', 'colorDepth', 'pixelDepth'].forEach(function (prop) {
     envolveGetter(screenProto, prop, function () { vetor('screen', { propriedade: prop }); });
   });
+
+  // ------------------------------------------------------------ hijacking e hook
+
+  /*
+   * APIs cujo hook pelo site e procurado. Cada uma recebe um wrapper leve do
+   * PrivacyLens. Quando a troca de referencia e detectada, a proxima chamada
+   * que passar pelo wrapper (vinda do hook do site, que repassa a chamada a
+   * funcao original) revela na pilha o script responsavel.
+   */
+  var capturarOrigem = _create(null);
+
+  function aoChamarApi(api) {
+    if (!capturarOrigem[api]) return;
+    capturarOrigem[api] = false;
+    emite(objeto({ tipo: 'hookOrigem', api: api, script: scriptDeOrigem() }), 'hookOrigem|' + api, true);
+  }
+
+  var xhrProto = win.XMLHttpRequest && XMLHttpRequest.prototype;
+  var historyProto = win.History && History.prototype;
+  var docProto = win.Document && Document.prototype;
+  var eventTargetProto = EventTarget.prototype;
+
+  envolveMetodo(donoDe(win, 'fetch'), 'fetch', function () { aoChamarApi('fetch'); });
+  envolveMetodo(xhrProto, 'open', function () { aoChamarApi('XMLHttpRequest.open'); });
+  envolveMetodo(xhrProto, 'send', function () { aoChamarApi('XMLHttpRequest.send'); });
+  envolveMetodo(navProto, 'sendBeacon', function () { aoChamarApi('navigator.sendBeacon'); });
+  envolveMetodo(historyProto, 'pushState', function () { aoChamarApi('history.pushState'); });
+  envolveMetodo(donoDe(win, 'open'), 'open', function () { aoChamarApi('window.open'); });
+  envolveAcessor(docProto, 'cookie', function () { aoChamarApi('document.cookie'); });
+
+  // WebSocket: indicio de canal persistente (com o script que o abriu)
+  var websocketsVistos = new _Set();
+  envolveConstrutor('WebSocket', function (args) {
+    aoChamarApi('WebSocket');
+    var url = sSlice(_String(args[0]), 0, 512);
+    if (setHas(websocketsVistos, url) || limiteAtingido()) return;
+    setAdd(websocketsVistos, url);
+    emite(objeto({ tipo: 'websocket', url: url, script: scriptDeOrigem() }));
+  });
+
+  // listeners de teclado/digitacao/mouse: keylogging e gravacao de sessao
+  var EVENTOS_MONITORADOS = new _Set(['keydown', 'keypress', 'keyup', 'input', 'mousemove']);
+  var listenersPorTipo = _create(null);
+
+  function descreveAlvo(alvo) {
+    if (alvo === win) return 'window';
+    if (alvo === doc) return 'document';
+    try {
+      return _apply(_toLowerCase, _String(_apply(_nodeName, alvo, [])), []);
+    } catch (e) {
+      return 'outro';
+    }
+  }
+
+  envolveMetodo(eventTargetProto, 'addEventListener', function (alvo, args) {
+    aoChamarApi('addEventListener');
+    var tipo = args[0];
+    if (typeof tipo !== 'string' || !setHas(EVENTOS_MONITORADOS, tipo)) return;
+    var n = listenersPorTipo[tipo] = (listenersPorTipo[tipo] || 0) + 1;
+    if (n > 300 || limiteAtingido()) return;
+    // se outra biblioteca (Sentry, zone.js...) envolveu o addEventListener,
+    // ela aparece como chamadora de todos os listeners: pula esse quadro
+    var intermediario = false;
+    try {
+      var atual = _getOwnPropertyDescriptor(eventTargetProto, 'addEventListener');
+      // envolvido no EventTarget.prototype, num prototipo intermediario
+      // (ex.: Node.prototype) ou no proprio objeto
+      intermediario = !atual || atual.value !== nossoAddEventListener ||
+        alvo.addEventListener !== nossoAddEventListener;
+    } catch (e) { /* */ }
+    var script = scriptDeOrigem(intermediario);
+    emite(objeto({ tipo: 'listener', evento: tipo, script: script, alvo: descreveAlvo(alvo) }),
+      'listener|' + tipo + '|' + script);
+  });
+
+  var nossoAddEventListener = (_getOwnPropertyDescriptor(eventTargetProto, 'addEventListener') || {}).value;
+
+  /*
+   * Retrato das referencias, tirado DEPOIS das instrumentacoes do proprio
+   * PrivacyLens (que ficam, assim, fora da deteccao). "instancia" e o objeto
+   * onde um hook poderia sombrear a propriedade do prototipo.
+   */
+  var ALVOS = [
+    { api: 'fetch', dono: donoDe(win, 'fetch'), prop: 'fetch' },
+    { api: 'XMLHttpRequest', dono: donoDe(win, 'XMLHttpRequest'), prop: 'XMLHttpRequest' },
+    { api: 'XMLHttpRequest.open', dono: xhrProto, prop: 'open' },
+    { api: 'XMLHttpRequest.send', dono: xhrProto, prop: 'send' },
+    { api: 'WebSocket', dono: donoDe(win, 'WebSocket'), prop: 'WebSocket' },
+    { api: 'navigator.sendBeacon', dono: navProto, prop: 'sendBeacon', instancia: navigator },
+    { api: 'addEventListener', dono: eventTargetProto, prop: 'addEventListener', instancia: doc },
+    { api: 'history.pushState', dono: historyProto, prop: 'pushState', instancia: history },
+    { api: 'window.open', dono: donoDe(win, 'open'), prop: 'open' },
+    { api: 'document.cookie', dono: docProto, prop: 'cookie', instancia: doc },
+    { api: 'Function.prototype.toString', dono: Function.prototype, prop: 'toString' }
+  ];
+
+  function leDescritor(alvo) {
+    var d = alvo.dono ? _getOwnPropertyDescriptor(alvo.dono, alvo.prop) : null;
+    return d ? { v: d.value, g: d.get, s: d.set } : null;
+  }
+
+  var retrato = [];
+  for (var ia = 0; ia < ALVOS.length; ia++) retrato[ia] = leDescritor(ALVOS[ia]);
+
+  function textoDaFuncao(fn) {
+    try { return _String(_apply(_toString, fn, [])); } catch (e) { return ''; }
+  }
+
+  function comparaReferencias(momento) {
+    for (var i = 0; i < ALVOS.length; i++) {
+      var alvo = ALVOS[i];
+      var antes = retrato[i];
+      if (!antes) continue;
+      var agora = leDescritor(alvo);
+      var mudou = !agora || agora.v !== antes.v || agora.g !== antes.g || agora.s !== antes.s;
+      var sombreado = false;
+      if (alvo.instancia && alvo.instancia !== alvo.dono) {
+        try { sombreado = !!_getOwnPropertyDescriptor(alvo.instancia, alvo.prop); } catch (e) { /* */ }
+      }
+      if (!mudou && !sombreado) continue;
+      var fn = null;
+      if (sombreado) {
+        var ds = _getOwnPropertyDescriptor(alvo.instancia, alvo.prop);
+        fn = ds && (ds.value || ds.get || ds.set);
+      } else if (agora) {
+        fn = agora.v !== antes.v ? agora.v : (agora.g !== antes.g ? agora.g : agora.s);
+      }
+      var codigo = typeof fn === 'function' ? textoDaFuncao(fn) : '';
+      var nativo = sIndexOf(codigo, '[native code]') >= 0;
+      emite(objeto({
+        tipo: 'hook',
+        api: alvo.api,
+        momento: momento,
+        nativo: nativo,
+        sombreamento: sombreado,
+        trecho: nativo ? '' : sSlice(codigo, 0, 200)
+      }), 'hook|' + alvo.api + '|' + momento, true);
+      capturarOrigem[alvo.api] = true;
+    }
+  }
+
+  try {
+    _apply(_addEventListener, doc, ['DOMContentLoaded', function () {
+      comparaReferencias('DOMContentLoaded');
+    }, true]);
+    _apply(_addEventListener, win, ['load', function () {
+      comparaReferencias('load');
+      _apply(_setTimeout, win, [function () { comparaReferencias('load+3s'); }, 3000]);
+    }, true]);
+  } catch (e) { /* sem documento */ }
 
   // ------------------------------------------------------------ IndexedDB
 
