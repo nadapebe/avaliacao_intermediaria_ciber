@@ -69,7 +69,7 @@ Todas as métricas são **por carregamento de página**. O registro da aba é ze
 9. **Session recording / keylogging:** algum destes:
    - listener de teclado ou digitação registrado por script de terceira parte;
    - o mesmo terceiro escutando teclado e movimento do mouse;
-   - requisição a host conhecido de gravação de sessão: Hotjar, Microsoft Clarity, FullStory, Smartlook, Mouseflow, Lucky Orange, Inspectlet, LogRocket, Contentsquare, Quantum Metric, SessionCam, ClickTale, Decibel e Yandex Metrica/Webvisor (`mc.yandex.ru`).
+   - requisição a host conhecido de gravação de sessão (`background/hijack.js`): Hotjar (`hotjar.com`, `hotjar.io`), Microsoft Clarity (`clarity.ms`), FullStory (`fullstory.com`), Smartlook (`smartlook.com`, `smartlook.cloud`), Mouseflow (`mouseflow.com`), Lucky Orange (`luckyorange.com`, `luckyorange.net`), Inspectlet (`inspectlet.com`), LogRocket (`logrocket.com`, `lr-ingest.io`, `lr-in.com`), Contentsquare (`contentsquare.net`), Quantum Metric (`quantummetric.com`), SessionCam (`sessioncam.com`), ClickTale (`clicktale.net`), Decibel (`decibelinsight.net`) e Yandex Metrica/Webvisor (`mc.yandex.ru`, `mc.yandex.com`, `mc.webvisor.org`).
 
 ### 2.2 Exemplo de cálculo
 
@@ -207,7 +207,7 @@ A tabela diz, para cada teste, onde a concordância é esperada e onde a diverg�
 Para que os números sejam reproduzíveis e comparáveis, as medições do relatório seguem este protocolo:
 
 1. **Perfil limpo do Firefox** (`about:profiles` → criar novo perfil), sem outras extensões. Bloqueadores como o uBlock Origin cancelariam requisições e injetariam *scriptlets* que o PrivacyLens apontaria como hook. A comparação com o uBlock Origin é feita separadamente, no Logger do próprio uBlock.
-2. **Proteção contra rastreamento no modo Padrão** do Firefox, o padrão de fábrica. O modo é registrado no relatório, porque ele altera o que é bloqueado.
+2. **Proteção contra rastreamento no modo Padrão** do Firefox, o padrão de fábrica. O modo não vai no JSON exportado; ele é registrado no relatório, porque altera o que é bloqueado.
 3. **Perfil novo, ou dados do site apagados, em janela normal** para cada site. Para apagar os dados do site: `about:preferences#privacy` → *Cookies e dados de sites* → *Gerenciar dados*. Isso garante a **primeira visita**. Uma revisita teria cookies pré-existentes, que não contam como injetados, e daria uma nota melhor. A janela privativa **não** é usada, porque nela o modo Padrão também bloqueia "conteúdo de rastreamento". Isso esconderia rastreadores que o Blacklight vê.
 4. DevTools aberto na aba *Rede*, com o cache desativado, antes de carregar a página. Assim o HAR registra todo o tráfego.
 5. **Banner de cookies aceito nos primeiros 10 s**, porque cookies gravados por JavaScript só são atribuídos até 30 s após o início da navegação. Depois, rolagem até o fim da página e **espera de 30 s** antes de exportar. O snapshot de cookies roda no `load` e 5 s depois, e os indícios de polling exigem 30 s de observação.
