@@ -1,0 +1,39 @@
+{
+  "manifest_version": 2,
+  "name": "PrivacyLens",
+  "version": "1.0.0",
+  "description": "Detecta e apresenta rastreadores, cookies, armazenamento HTML5, fingerprinting e indicios de hijacking na pagina em uso.",
+  "author": "Arieh",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "privacylens@insper.local",
+      "strict_min_version": "128.0"
+    }
+  },
+  "permissions": [
+    "<all_urls>",
+    "webRequest",
+    "webRequestBlocking",
+    "cookies",
+    "storage",
+    "tabs",
+    "webNavigation"
+  ],
+  "background": {
+    "scripts": [
+      "background/main.js"
+    ],
+    "persistent": true
+  },
+  "browser_action": {
+    "default_title": "PrivacyLens",
+    "default_icon": {
+      "48": "icons/icon.svg",
+      "96": "icons/icon.svg"
+    }
+  },
+  "icons": {
+    "48": "icons/icon.svg",
+    "96": "icons/icon.svg"
+  }
+}
