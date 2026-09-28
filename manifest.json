@@ -25,6 +25,7 @@
       "lib/etld.js",
       "background/state.js",
       "background/requests.js",
+      "background/cookies.js",
       "background/main.js"
     ],
     "persistent": true

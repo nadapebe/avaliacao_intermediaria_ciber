@@ -90,6 +90,8 @@ var PL = window.PL || (window.PL = {});
   function registroDa(details) {
     if (details.tabId === undefined || details.tabId < 0) return null;
     var rec = PL.state.getOrCreate(details.tabId);
+    // loja de cookies da aba (normal, privativa, container)
+    if (rec && details.cookieStoreId && !rec.cookieStoreId) rec.cookieStoreId = details.cookieStoreId;
     if (rec && !rec.pageDomain) {
       var topo = details.type === 'main_frame' ? details.url : urlDoTopo(details);
       if (ehUrlWeb(topo)) {
@@ -427,6 +429,16 @@ var PL = window.PL || (window.PL = {});
       restauradaDoCache: voltouAvancou,
       semRequisicao: true
     };
+    // sem requisicao nao ha details.cookieStoreId: busca a loja de cookies da
+    // aba, para que cookies de outra janela (ex.: privativa) nao sejam atribuidos
+    var tabId = details.tabId;
+    Promise.resolve().then(function () {
+      return browser.tabs.get(tabId);
+    }).then(function (tab) {
+      if (tab && tab.cookieStoreId && PL.state.get(tabId) === novo && !novo.cookieStoreId) {
+        novo.cookieStoreId = tab.cookieStoreId;
+      }
+    }).catch(function () { /* aba fechada */ });
   }
 
   function onTabRemoved(tabId) {

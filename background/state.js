@@ -104,6 +104,14 @@ var PL = window.PL || (window.PL = {});
       return rec;
     },
 
+    /**
+     * Todos os registros. Usado para atribuir eventos que nao informam a aba
+     * (ex.: cookies.onChanged).
+     */
+    all: function () {
+      return Array.from(tabs.values());
+    },
+
     remove: function (tabId) {
       tabs.delete(tabId);
     },

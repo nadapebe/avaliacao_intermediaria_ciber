@@ -88,7 +88,10 @@ PL.init = function () {
   });
 
   // modulos com listeners proprios, na ordem de registro
-  var modulos = [['requests', PL.requests]];
+  var modulos = [
+    ['requests', PL.requests],
+    ['cookies', PL.cookies]
+  ];
   modulos.forEach(function (m) {
     if (!m[1] || typeof m[1].register !== 'function') {
       PL.warn('modulo ausente:', m[0]);
