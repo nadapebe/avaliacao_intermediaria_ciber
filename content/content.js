@@ -193,12 +193,14 @@
     document.dispatchEvent(new CustomEvent(EVENTO_PONTE + ':pronto'));
   }
 
-  document.addEventListener(EVENTO_PONTE, onEventoPagina, true);
+  // fase de captura do window, registrada antes de qualquer script do site:
+  // nenhum listener da pagina consegue interromper os eventos antes
+  window.addEventListener(EVENTO_PONTE, onEventoPagina, true);
   // aperto de mao nos dois sentidos, porque a ordem de execucao entre o
   // content script e o inject.js nao e garantida: a ponte avisa "pronto" ao
   // nascer e responde de novo a cada "ping" do inject.js. O inject.js guarda
   // os eventos disparados antes do aviso e os reenvia ao recebe-lo.
-  document.addEventListener(EVENTO_PONTE + ':ping', avisaPronto, true);
+  window.addEventListener(EVENTO_PONTE + ':ping', avisaPronto, true);
   avisaPronto();
 
   agendaColetas();

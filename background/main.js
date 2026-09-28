@@ -85,14 +85,15 @@ function onCommitted(details) {
  * do seu tipo com PL.onMensagem('tipo', fn). O content script envia 'storage'
  * e 'pagina' (eventos do inject.js); o popup usa tipos proprios.
  */
-PL.mensagens = {};
+// sem prototipo: um tipo vindo da pagina como "valueOf" nao acha metodo herdado
+PL.mensagens = Object.create(null);
 
 PL.onMensagem = function (tipo, fn) {
   PL.mensagens[tipo] = fn;
 };
 
 /** Tratadores dos eventos do script de pagina, pelo campo evento.tipo. */
-PL.eventosPagina = {};
+PL.eventosPagina = Object.create(null);
 
 PL.onEventoPagina = function (tipo, fn) {
   PL.eventosPagina[tipo] = fn;
@@ -131,13 +132,11 @@ var STORAGE_BANCOS_LIMITE = 50;
  * do frame. Frames da mesma origem compartilham o mesmo armazenamento, entao
  * a coleta mais recente substitui a anterior; o pico de bytes e mantido.
  */
-function onStorage(msg, sender) {
-  var rec = PL.registroDoRemetente(msg, sender);
-  if (!rec || !msg.dados) return;
-  var origem = typeof msg.origem === 'string' ? msg.origem : 'null';
+function storageDaOrigem(rec, msg) {
+  var origem = typeof msg.origem === 'string' ? msg.origem.slice(0, 512) : 'null';
   var st = rec.storage.get(origem);
   if (!st) {
-    if (rec.storage.size >= STORAGE_ORIGENS_LIMITE) return;
+    if (rec.storage.size >= STORAGE_ORIGENS_LIMITE) return null;
     var dominio = origem === 'null' ? '' : PL.domainOf(origem);
     st = {
       origem: origem,
@@ -152,6 +151,14 @@ function onStorage(msg, sender) {
     };
     rec.storage.set(origem, st);
   }
+  return st;
+}
+
+function onStorage(msg, sender) {
+  var rec = PL.registroDoRemetente(msg, sender);
+  if (!rec || !msg.dados) return;
+  var st = storageDaOrigem(rec, msg);
+  if (!st) return;
   var d = msg.dados;
   st.terceiraParte = !!st.dominio && st.dominio !== rec.pageDomain;
   if (sender.frameId === 0) st.topo = true;
@@ -170,6 +177,98 @@ function onStorage(msg, sender) {
       if (st.bancosIndexedDB.size < STORAGE_BANCOS_LIMITE) st.bancosIndexedDB.add(String(b));
     });
   }
+}
+
+// ---------------------------------------------------------------- fingerprint
+
+var CANVAS_EVENTOS_LIMITE = 100;
+var VETOR_SCRIPTS_LIMITE = 50;
+
+/**
+ * Conversoes seguras para dados vindos da pagina: um objeto com toString
+ * malicioso lancaria excecao em String()/Number().
+ */
+function texto(v, max) {
+  if (typeof v !== 'string' && typeof v !== 'number' && typeof v !== 'boolean') return '';
+  return String(v).slice(0, max || 512);
+}
+
+function numero(v) {
+  return typeof v === 'number' && isFinite(v) ? v : 0;
+}
+
+// vetores que o inject.js emite; qualquer outro nome e descartado
+var VETORES_CONHECIDOS = [
+  'fontes', 'webgl_unmasked', 'webgl_parametros', 'audio', 'webrtc', 'battery', 'screen',
+  'navigator.hardwareConcurrency', 'navigator.plugins', 'navigator.languages', 'navigator.deviceMemory'
+];
+
+/** Script de origem de um evento: URL, dominio e se e de terceira parte. */
+function origemDoScript(rec, url) {
+  url = texto(url);
+  var dominio = /^(https?|blob):/i.test(url) ? PL.domainOf(url.replace(/^blob:/i, '')) : '';
+  return {
+    script: url,
+    dominio: dominio,
+    terceiraParte: !!dominio && dominio !== rec.pageDomain
+  };
+}
+
+/**
+ * Leitura de canvas avaliada pelo inject.js. Os dados vem da pagina e sao
+ * tratados como nao confiaveis: cada campo e convertido e limitado.
+ */
+function onCanvas(rec, ev, msg, sender) {
+  var lista = rec.fingerprint.canvas;
+  if (lista.length >= CANVAS_EVENTOS_LIMITE) return;
+  var c = ev.criterios || {};
+  var o = origemDoScript(rec, ev.script);
+  lista.push({
+    fingerprint: ev.fingerprint === true,
+    script: o.script,
+    dominioScript: o.dominio,
+    terceiraParte: o.terceiraParte,
+    metodo: texto(ev.metodo, 32),
+    largura: numero(ev.largura),
+    altura: numero(ev.altura),
+    caracteresDistintos: numero(ev.caracteresDistintos),
+    cores: numero(ev.cores),
+    amostraTexto: texto(ev.amostraTexto, 32),
+    criterios: {
+      tamanho: c.tamanho === true,
+      texto: c.texto === true,
+      leitura: c.leitura === true,
+      oculto: c.oculto === true
+    },
+    frameOrigem: texto(msg.origem),
+    frameId: sender.frameId,
+    ts: msg.ts
+  });
+}
+
+/** Vetores adicionais: WebGL, audio, WebRTC, navigator, screen, fontes. */
+function onVetor(rec, ev, msg, sender) {
+  var nome = texto(ev.vetor, 64);
+  if (VETORES_CONHECIDOS.indexOf(nome) < 0) return;
+  var v = rec.fingerprint.vectors.get(nome);
+  if (!v) {
+    v = { vetor: nome, scripts: new Map(), frames: new Set(), terceiraParte: false };
+    rec.fingerprint.vectors.set(nome, v);
+  }
+  var o = origemDoScript(rec, ev.script);
+  if (v.scripts.size < VETOR_SCRIPTS_LIMITE && !v.scripts.has(o.script)) v.scripts.set(o.script, o);
+  if (o.terceiraParte) v.terceiraParte = true;
+  v.frames.add(sender.frameId);
+}
+
+/** Hook de indexedDB.open: fonte confiavel dos bancos abertos na origem. */
+function onIndexedDB(rec, ev, msg) {
+  var nome = texto(ev.nome, 64);
+  if (!nome) return;
+  var st = storageDaOrigem(rec, msg);
+  if (!st) return;
+  if (st.bancosIndexedDB.size < STORAGE_BANCOS_LIMITE) st.bancosIndexedDB.add(nome);
+  st.indexedDBViaHook = true;
 }
 
 /** Eventos do inject.js (repassados pelo content script). */
@@ -211,6 +310,9 @@ PL.init = function () {
 
   PL.onMensagem('storage', onStorage);
   PL.onMensagem('pagina', onPagina);
+  PL.onEventoPagina('canvas', onCanvas);
+  PL.onEventoPagina('vetor', onVetor);
+  PL.onEventoPagina('indexedDB', onIndexedDB);
   browser.runtime.onMessage.addListener(PL.guard('main.onMessage', onMessage));
 
   browser.webNavigation.onCommitted.addListener(PL.guard('main.onCommitted', onCommitted));
