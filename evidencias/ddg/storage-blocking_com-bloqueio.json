@@ -1,0 +1,1985 @@
+{
+  "ferramenta": "PrivacyLens",
+  "versao": "1.0.0",
+  "geradoEm": "2026-09-28T15:40:08.252Z",
+  "pagina": {
+    "url": "https://privacy-test-pages.site/privacy-protections/storage-blocking/",
+    "dominio": "privacy-test-pages.site",
+    "inicioCarregamento": "2026-09-28T15:39:23.389Z",
+    "cookieStoreId": "firefox-default",
+    "navegacao": {
+      "requestId": "973",
+      "origem": "https://privacy-test-pages.site/privacy-protections/request-blocking/",
+      "origemDominio": "privacy-test-pages.site",
+      "inicio": "https://privacy-test-pages.site/privacy-protections/storage-blocking/",
+      "ts": 1790609963388,
+      "restauradaDoCache": false,
+      "anteriorVisto": true
+    },
+    "usuarioInteragiu": true
+  },
+  "score": {
+    "valor": 64,
+    "nota": "B",
+    "totalPenalidades": 35.8,
+    "criterios": [
+      {
+        "id": "terceiros",
+        "nome": "Domínios de 3ª parte contatados",
+        "peso": 15,
+        "observado": 2,
+        "detalhe": "third-party.site, ad-company.site",
+        "penalidade": 4.8,
+        "formula": "min(15, 3 * log2(1 + n))",
+        "justificativa": "Superfície de exposição: cada terceiro recebe IP, User-Agent e a página visitada. Escala logarítmica porque o primeiro terceiro pesa muito mais que o trigésimo (a penalidade atinge o teto em 31 terceiros)."
+      },
+      {
+        "id": "cookies3p",
+        "nome": "Cookies de 3ª parte persistentes",
+        "peso": 20,
+        "observado": 9,
+        "detalhe": "jsdata (third-party.site), top_thirdparty_headerdata (third-party.site), __Host-jsdata_host (third-party.site), jsdata_no_samesite (third-party.site), thirdparty_firstparty_headerdata (third-party.site) e mais 4",
+        "penalidade": 20,
+        "formula": "min(20, 4 * n)",
+        "justificativa": "Identificador estável entre sites: o mecanismo clássico de rastreamento."
+      },
+      {
+        "id": "cookies1pLongos",
+        "nome": "Cookies de 1ª parte persistentes > 90 dias",
+        "peso": 5,
+        "observado": 6,
+        "detalhe": "jsdata (400 dias), tptdata (400 dias), tpsdata (400 dias), __Host-jsdata_host (400 dias), jsdata_no_samesite (400 dias) e mais 1",
+        "penalidade": 5,
+        "formula": "min(5, 1 * n)",
+        "justificativa": "Cookie de primeira parte de longa duração funciona como identificador do visitante (ex.: _ga, _fbp), lido por scripts de terceiros embutidos na página."
+      },
+      {
+        "id": "storage3p",
+        "nome": "Storage HTML5 de 3ª parte (em iframe)",
+        "peso": 10,
+        "observado": 2,
+        "detalhe": "https://good.third-party.site, https://convert.ad-company.site",
+        "penalidade": 6,
+        "formula": "min(10, 3 * n)",
+        "justificativa": "Persistência fora do ciclo de vida do cookie: sobrevive à limpeza de cookies e não é controlada pelas preferências de cookie."
+      },
+      {
+        "id": "localStorage1p",
+        "nome": "Volume de localStorage de 1ª parte",
+        "peso": 5,
+        "observado": 14,
+        "detalhe": "0 KB",
+        "penalidade": 0,
+        "formula": "min(5, bytes / 50 KB)",
+        "justificativa": "Indicador de supercookie ou de estado excessivo guardado no navegador do usuário."
+      },
+      {
+        "id": "canvas",
+        "nome": "Canvas fingerprinting",
+        "peso": 15,
+        "observado": false,
+        "detalhe": "não detectado",
+        "penalidade": 0,
+        "formula": "binário: 15 se detectado",
+        "justificativa": "Identificação sem consentimento e sem estado: não é removida limpando cookies e o usuário não consegue evitar."
+      },
+      {
+        "id": "sync",
+        "nome": "Cookie sync / bounce tracking",
+        "peso": 15,
+        "observado": {
+          "sincronismos": 0,
+          "bounce": false
+        },
+        "detalhe": "não detectado",
+        "penalidade": 0,
+        "formula": "8 por sync distinto, +15 se houver bounce, teto 15",
+        "justificativa": "Une as identidades do usuário em domínios diferentes, anulando o isolamento de cookies por site."
+      },
+      {
+        "id": "hijack",
+        "nome": "Indícios de hijacking / hook",
+        "peso": 10,
+        "observado": 0,
+        "detalhe": "nenhum",
+        "penalidade": 0,
+        "formula": "5 por indício de severidade média ou alta, teto 10",
+        "justificativa": "Vai além do rastreamento: é controle do navegador (canal de comando, interceptação de chamadas)."
+      },
+      {
+        "id": "sessao",
+        "nome": "Session recording / keylogging",
+        "peso": 5,
+        "observado": false,
+        "detalhe": "não detectado",
+        "penalidade": 0,
+        "formula": "binário: 5 se detectado",
+        "justificativa": "Captura o conteúdo digitado e os movimentos do usuário, não só metadados."
+      }
+    ],
+    "informativo": {
+      "facebookPixel": false,
+      "googleRemarketing": false
+    },
+    "calculadoEm": 1790610008252
+  },
+  "requisicoes": {
+    "total": 67,
+    "primeiraParte": 25,
+    "terceiraParte": 42,
+    "erros": 10,
+    "dominiosTerceiros": 2,
+    "logDescartadas": 0
+  },
+  "terceiros": [
+    {
+      "dominio": "third-party.site",
+      "requisicoes": 30,
+      "tipos": [
+        "script",
+        "sub_frame",
+        "xmlhttprequest"
+      ],
+      "enviouCookie": true,
+      "recebeuSetCookie": true,
+      "primeira": "2026-09-28T15:39:23.868Z",
+      "ultima": "2026-09-28T15:39:50.416Z",
+      "exemplos": [
+        "https://broken.third-party.site/privacy-protections/storage-blocking/3rdparty.js",
+        "https://good.third-party.site/privacy-protections/storage-blocking/3rdparty.js",
+        "https://good.third-party.site/privacy-protections/storage-blocking/iframe.html?data=189",
+        "https://broken.third-party.site/privacy-protections/storage-blocking/iframe.html?data=189",
+        "https://good.third-party.site/set-cookie?value=189&name=top_thirdparty_headerdata"
+      ],
+      "classificacaoFirefox": [],
+      "erros": 8,
+      "ultimoErro": "NS_ERROR_ABORT",
+      "bloqueadasFirefox": 0,
+      "bloqueadasPlugin": 8
+    },
+    {
+      "dominio": "ad-company.site",
+      "requisicoes": 12,
+      "tipos": [
+        "sub_frame",
+        "script",
+        "xmlhttprequest"
+      ],
+      "enviouCookie": true,
+      "recebeuSetCookie": false,
+      "primeira": "2026-09-28T15:39:43.313Z",
+      "ultima": "2026-09-28T15:39:50.416Z",
+      "exemplos": [
+        "https://convert.ad-company.site/privacy-protections/storage-blocking/iframe.html?data=189",
+        "https://convert.ad-company.site/helpers/idb-wrapper.js",
+        "https://convert.ad-company.site/privacy-protections/storage-blocking/helpers/globals.js",
+        "https://convert.ad-company.site/privacy-protections/storage-blocking/helpers/commonTests.js",
+        "https://convert.ad-company.site/privacy-protections/storage-blocking/iframe.js"
+      ],
+      "classificacaoFirefox": [],
+      "erros": 2,
+      "ultimoErro": "NS_ERROR_CORRUPTED_CONTENT",
+      "bloqueadasFirefox": 0,
+      "bloqueadasPlugin": 0
+    }
+  ],
+  "cookies": {
+    "resumo": {
+      "injetados": 16,
+      "preexistentes": 9,
+      "removidos": 0,
+      "primeiraParte": 7,
+      "terceiraParte": 9,
+      "sessao": 0,
+      "persistente": 16,
+      "matriz": {
+        "primeira": {
+          "sessao": 0,
+          "persistente": 7
+        },
+        "terceira": {
+          "sessao": 0,
+          "persistente": 9
+        }
+      },
+      "terceiraPersistente": 9,
+      "primeiraLongoPrazo": 6,
+      "longoPrazo": 12,
+      "aptoCrossSite": 11,
+      "httpOnly": 4,
+      "secure": 14,
+      "particionados": 9,
+      "naoArmazenados": 0,
+      "viaHttp": 4,
+      "viaJavascript": 12
+    },
+    "snapshotEm": "2026-09-28T15:39:29.568Z",
+    "descartados": 0,
+    "lista": [
+      {
+        "nome": "__Host-jsdata_host",
+        "dominio": "convert.ad-company.site",
+        "dominioRegistravel": "ad-company.site",
+        "path": "/",
+        "terceiraParte": true,
+        "persistente": true,
+        "duracaoDias": 400,
+        "longoPrazo": true,
+        "expira": "2027-11-02T15:39:44.487Z",
+        "httpOnly": false,
+        "secure": true,
+        "sameSite": "none",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": true,
+        "hostOnly": true,
+        "particionado": true,
+        "particao": "https://privacy-test-pages.site",
+        "origem": "javascript",
+        "fontes": [
+          "onChanged"
+        ],
+        "injetado": true,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 1,
+        "valorAmostra": "189...(3 caracteres)",
+        "primeiraVez": "2026-09-28T15:39:44.488Z"
+      },
+      {
+        "nome": "jsdata",
+        "dominio": "convert.ad-company.site",
+        "dominioRegistravel": "ad-company.site",
+        "path": "/privacy-protections/storage-blocking",
+        "terceiraParte": true,
+        "persistente": true,
+        "duracaoDias": 400,
+        "longoPrazo": true,
+        "expira": "2027-11-02T15:39:44.487Z",
+        "httpOnly": false,
+        "secure": true,
+        "sameSite": "none",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": true,
+        "hostOnly": true,
+        "particionado": true,
+        "particao": "https://privacy-test-pages.site",
+        "origem": "javascript",
+        "fontes": [
+          "onChanged"
+        ],
+        "injetado": true,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 1,
+        "valorAmostra": "189...(3 caracteres)",
+        "primeiraVez": "2026-09-28T15:39:44.488Z"
+      },
+      {
+        "nome": "jsdata_no_samesite",
+        "dominio": "convert.ad-company.site",
+        "dominioRegistravel": "ad-company.site",
+        "path": "/",
+        "terceiraParte": true,
+        "persistente": true,
+        "duracaoDias": 400,
+        "longoPrazo": true,
+        "expira": "2027-11-02T15:39:44.487Z",
+        "httpOnly": false,
+        "secure": true,
+        "sameSite": "unspecified",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": true,
+        "hostOnly": true,
+        "particionado": true,
+        "particao": "https://privacy-test-pages.site",
+        "origem": "javascript",
+        "fontes": [
+          "onChanged"
+        ],
+        "injetado": true,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 1,
+        "valorAmostra": "189...(3 caracteres)",
+        "primeiraVez": "2026-09-28T15:39:44.489Z"
+      },
+      {
+        "nome": "__Host-jsdata_host",
+        "dominio": "good.third-party.site",
+        "dominioRegistravel": "third-party.site",
+        "path": "/",
+        "terceiraParte": true,
+        "persistente": true,
+        "duracaoDias": 400,
+        "longoPrazo": true,
+        "expira": "2027-11-02T15:39:44.124Z",
+        "httpOnly": false,
+        "secure": true,
+        "sameSite": "none",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": true,
+        "hostOnly": true,
+        "particionado": true,
+        "particao": "https://privacy-test-pages.site",
+        "origem": "javascript",
+        "fontes": [
+          "snapshot",
+          "onChanged"
+        ],
+        "injetado": true,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 1,
+        "valorAmostra": "189...(3 caracteres)",
+        "primeiraVez": "2026-09-28T15:39:24.562Z"
+      },
+      {
+        "nome": "__Host-jsdata_host",
+        "dominio": "broken.third-party.site",
+        "dominioRegistravel": "third-party.site",
+        "path": "/",
+        "terceiraParte": true,
+        "persistente": true,
+        "duracaoDias": 400,
+        "longoPrazo": true,
+        "expira": "2027-11-02T14:54:06.664Z",
+        "httpOnly": false,
+        "secure": true,
+        "sameSite": "none",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": true,
+        "hostOnly": true,
+        "particionado": true,
+        "particao": "https://privacy-test-pages.site",
+        "origem": "preexistente",
+        "fontes": [
+          "snapshot"
+        ],
+        "injetado": false,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 0,
+        "valorAmostra": "114...(3 caracteres)",
+        "primeiraVez": "2026-09-28T15:39:24.562Z"
+      },
+      {
+        "nome": "bounceUID",
+        "dominio": "bad.third-party.site",
+        "dominioRegistravel": "third-party.site",
+        "path": "/privacy-protections/bounce-tracking",
+        "terceiraParte": true,
+        "persistente": true,
+        "duracaoDias": 60,
+        "longoPrazo": false,
+        "expira": "2026-11-27T14:58:30.069Z",
+        "httpOnly": false,
+        "secure": false,
+        "sameSite": "unspecified",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": false,
+        "hostOnly": true,
+        "particionado": false,
+        "particao": "",
+        "origem": "preexistente",
+        "fontes": [
+          "snapshot"
+        ],
+        "injetado": false,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 0,
+        "valorAmostra": "54...(2 caracteres)",
+        "primeiraVez": "2026-09-28T15:39:24.562Z"
+      },
+      {
+        "nome": "jsdata",
+        "dominio": "good.third-party.site",
+        "dominioRegistravel": "third-party.site",
+        "path": "/privacy-protections/storage-blocking",
+        "terceiraParte": true,
+        "persistente": true,
+        "duracaoDias": 400,
+        "longoPrazo": true,
+        "expira": "2027-11-02T15:39:44.124Z",
+        "httpOnly": false,
+        "secure": true,
+        "sameSite": "none",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": true,
+        "hostOnly": true,
+        "particionado": true,
+        "particao": "https://privacy-test-pages.site",
+        "origem": "javascript",
+        "fontes": [
+          "snapshot",
+          "onChanged"
+        ],
+        "injetado": true,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 1,
+        "valorAmostra": "189...(3 caracteres)",
+        "primeiraVez": "2026-09-28T15:39:24.562Z"
+      },
+      {
+        "nome": "jsdata",
+        "dominio": "broken.third-party.site",
+        "dominioRegistravel": "third-party.site",
+        "path": "/privacy-protections/storage-blocking",
+        "terceiraParte": true,
+        "persistente": true,
+        "duracaoDias": 400,
+        "longoPrazo": true,
+        "expira": "2027-11-02T14:54:06.664Z",
+        "httpOnly": false,
+        "secure": true,
+        "sameSite": "none",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": true,
+        "hostOnly": true,
+        "particionado": true,
+        "particao": "https://privacy-test-pages.site",
+        "origem": "preexistente",
+        "fontes": [
+          "snapshot"
+        ],
+        "injetado": false,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 0,
+        "valorAmostra": "114...(3 caracteres)",
+        "primeiraVez": "2026-09-28T15:39:24.562Z"
+      },
+      {
+        "nome": "jsdata_no_samesite",
+        "dominio": "good.third-party.site",
+        "dominioRegistravel": "third-party.site",
+        "path": "/",
+        "terceiraParte": true,
+        "persistente": true,
+        "duracaoDias": 400,
+        "longoPrazo": true,
+        "expira": "2027-11-02T15:39:44.124Z",
+        "httpOnly": false,
+        "secure": true,
+        "sameSite": "unspecified",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": true,
+        "hostOnly": true,
+        "particionado": true,
+        "particao": "https://privacy-test-pages.site",
+        "origem": "javascript",
+        "fontes": [
+          "snapshot",
+          "onChanged"
+        ],
+        "injetado": true,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 1,
+        "valorAmostra": "189...(3 caracteres)",
+        "primeiraVez": "2026-09-28T15:39:24.562Z"
+      },
+      {
+        "nome": "jsdata_no_samesite",
+        "dominio": "broken.third-party.site",
+        "dominioRegistravel": "third-party.site",
+        "path": "/",
+        "terceiraParte": true,
+        "persistente": true,
+        "duracaoDias": 400,
+        "longoPrazo": true,
+        "expira": "2027-11-02T14:54:06.664Z",
+        "httpOnly": false,
+        "secure": true,
+        "sameSite": "unspecified",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": true,
+        "hostOnly": true,
+        "particionado": true,
+        "particao": "https://privacy-test-pages.site",
+        "origem": "preexistente",
+        "fontes": [
+          "snapshot"
+        ],
+        "injetado": false,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 0,
+        "valorAmostra": "114...(3 caracteres)",
+        "primeiraVez": "2026-09-28T15:39:24.562Z"
+      },
+      {
+        "nome": "thirdpartyAd_thirdparty_headerdata",
+        "dominio": "good.third-party.site",
+        "dominioRegistravel": "third-party.site",
+        "path": "/",
+        "terceiraParte": true,
+        "persistente": true,
+        "duracaoDias": 10,
+        "longoPrazo": false,
+        "expira": "2026-10-08T15:39:44.000Z",
+        "httpOnly": true,
+        "secure": true,
+        "sameSite": "none",
+        "sameSiteDeclarado": "none",
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": true,
+        "hostOnly": true,
+        "particionado": true,
+        "particao": "https://privacy-test-pages.site",
+        "origem": "http",
+        "fontes": [
+          "snapshot",
+          "onChanged",
+          "header"
+        ],
+        "injetado": true,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "https://good.third-party.site/set-cookie?value=189&name=thirdpartyAd_thirdparty_headerdata",
+        "escritas": 2,
+        "valorAmostra": "189...(3 caracteres)",
+        "primeiraVez": "2026-09-28T15:39:24.562Z"
+      },
+      {
+        "nome": "thirdpartyAd_tracker_headerdata",
+        "dominio": "broken.third-party.site",
+        "dominioRegistravel": "third-party.site",
+        "path": "/",
+        "terceiraParte": true,
+        "persistente": true,
+        "duracaoDias": 10,
+        "longoPrazo": false,
+        "expira": "2026-10-08T14:54:07.190Z",
+        "httpOnly": true,
+        "secure": true,
+        "sameSite": "none",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": true,
+        "hostOnly": true,
+        "particionado": true,
+        "particao": "https://privacy-test-pages.site",
+        "origem": "preexistente",
+        "fontes": [
+          "snapshot"
+        ],
+        "injetado": false,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 0,
+        "valorAmostra": "114...(3 caracteres)",
+        "primeiraVez": "2026-09-28T15:39:24.562Z"
+      },
+      {
+        "nome": "thirdparty_firstparty_headerdata",
+        "dominio": "good.third-party.site",
+        "dominioRegistravel": "third-party.site",
+        "path": "/",
+        "terceiraParte": true,
+        "persistente": true,
+        "duracaoDias": 10,
+        "longoPrazo": false,
+        "expira": "2026-10-08T15:39:44.000Z",
+        "httpOnly": true,
+        "secure": true,
+        "sameSite": "none",
+        "sameSiteDeclarado": "none",
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": true,
+        "hostOnly": true,
+        "particionado": true,
+        "particao": "https://privacy-test-pages.site",
+        "origem": "http",
+        "fontes": [
+          "snapshot",
+          "onChanged",
+          "header"
+        ],
+        "injetado": true,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "https://good.third-party.site/set-cookie?value=189&name=thirdparty_firstparty_headerdata",
+        "escritas": 2,
+        "valorAmostra": "189...(3 caracteres)",
+        "primeiraVez": "2026-09-28T15:39:24.562Z"
+      },
+      {
+        "nome": "thirdparty_tracker_headerdata",
+        "dominio": "broken.third-party.site",
+        "dominioRegistravel": "third-party.site",
+        "path": "/",
+        "terceiraParte": true,
+        "persistente": true,
+        "duracaoDias": 10,
+        "longoPrazo": false,
+        "expira": "2026-10-08T14:54:06.849Z",
+        "httpOnly": true,
+        "secure": true,
+        "sameSite": "none",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": true,
+        "hostOnly": true,
+        "particionado": true,
+        "particao": "https://privacy-test-pages.site",
+        "origem": "preexistente",
+        "fontes": [
+          "snapshot"
+        ],
+        "injetado": false,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 0,
+        "valorAmostra": "114...(3 caracteres)",
+        "primeiraVez": "2026-09-28T15:39:24.562Z"
+      },
+      {
+        "nome": "thirdpartytracker_firstparty_headerdata",
+        "dominio": "broken.third-party.site",
+        "dominioRegistravel": "third-party.site",
+        "path": "/",
+        "terceiraParte": true,
+        "persistente": true,
+        "duracaoDias": 10,
+        "longoPrazo": false,
+        "expira": "2026-10-08T14:54:06.849Z",
+        "httpOnly": true,
+        "secure": true,
+        "sameSite": "none",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": true,
+        "hostOnly": true,
+        "particionado": true,
+        "particao": "https://privacy-test-pages.site",
+        "origem": "preexistente",
+        "fontes": [
+          "snapshot"
+        ],
+        "injetado": false,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 0,
+        "valorAmostra": "114...(3 caracteres)",
+        "primeiraVez": "2026-09-28T15:39:24.562Z"
+      },
+      {
+        "nome": "thirdpartytracker_thirdparty_headerdata",
+        "dominio": "good.third-party.site",
+        "dominioRegistravel": "third-party.site",
+        "path": "/",
+        "terceiraParte": true,
+        "persistente": true,
+        "duracaoDias": 10,
+        "longoPrazo": false,
+        "expira": "2026-10-08T14:54:06.849Z",
+        "httpOnly": true,
+        "secure": true,
+        "sameSite": "none",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": true,
+        "hostOnly": true,
+        "particionado": true,
+        "particao": "https://privacy-test-pages.site",
+        "origem": "preexistente",
+        "fontes": [
+          "snapshot"
+        ],
+        "injetado": false,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 0,
+        "valorAmostra": "114...(3 caracteres)",
+        "primeiraVez": "2026-09-28T15:39:24.562Z"
+      },
+      {
+        "nome": "top_thirdparty_headerdata",
+        "dominio": "good.third-party.site",
+        "dominioRegistravel": "third-party.site",
+        "path": "/",
+        "terceiraParte": true,
+        "persistente": true,
+        "duracaoDias": 10,
+        "longoPrazo": false,
+        "expira": "2026-10-08T15:39:43.000Z",
+        "httpOnly": true,
+        "secure": true,
+        "sameSite": "none",
+        "sameSiteDeclarado": "none",
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": true,
+        "hostOnly": true,
+        "particionado": true,
+        "particao": "https://privacy-test-pages.site",
+        "origem": "http",
+        "fontes": [
+          "snapshot",
+          "onChanged",
+          "header"
+        ],
+        "injetado": true,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "https://good.third-party.site/set-cookie?value=189&name=top_thirdparty_headerdata",
+        "escritas": 2,
+        "valorAmostra": "189...(3 caracteres)",
+        "primeiraVez": "2026-09-28T15:39:24.562Z"
+      },
+      {
+        "nome": "top_tracker_headerdata",
+        "dominio": "broken.third-party.site",
+        "dominioRegistravel": "third-party.site",
+        "path": "/",
+        "terceiraParte": true,
+        "persistente": true,
+        "duracaoDias": 10,
+        "longoPrazo": false,
+        "expira": "2026-10-08T14:54:06.137Z",
+        "httpOnly": true,
+        "secure": true,
+        "sameSite": "none",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": true,
+        "hostOnly": true,
+        "particionado": true,
+        "particao": "https://privacy-test-pages.site",
+        "origem": "preexistente",
+        "fontes": [
+          "snapshot"
+        ],
+        "injetado": false,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 0,
+        "valorAmostra": "114...(3 caracteres)",
+        "primeiraVez": "2026-09-28T15:39:24.562Z"
+      },
+      {
+        "nome": "__Host-jsdata_host",
+        "dominio": "privacy-test-pages.site",
+        "dominioRegistravel": "privacy-test-pages.site",
+        "path": "/",
+        "terceiraParte": false,
+        "persistente": true,
+        "duracaoDias": 400,
+        "longoPrazo": true,
+        "expira": "2027-11-02T15:39:43.315Z",
+        "httpOnly": false,
+        "secure": true,
+        "sameSite": "lax",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "lax",
+        "aptoCrossSite": false,
+        "hostOnly": true,
+        "particionado": false,
+        "particao": "",
+        "origem": "javascript",
+        "fontes": [
+          "snapshot",
+          "onChanged"
+        ],
+        "injetado": true,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 1,
+        "valorAmostra": "189...(3 caracteres)",
+        "primeiraVez": "2026-09-28T15:39:24.562Z"
+      },
+      {
+        "nome": "cookiestoredata",
+        "dominio": "privacy-test-pages.site",
+        "dominioRegistravel": "privacy-test-pages.site",
+        "path": "/",
+        "terceiraParte": false,
+        "persistente": true,
+        "duracaoDias": 400,
+        "longoPrazo": true,
+        "expira": "2027-11-02T15:39:43.326Z",
+        "httpOnly": false,
+        "secure": true,
+        "sameSite": "strict",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "strict",
+        "aptoCrossSite": false,
+        "hostOnly": true,
+        "particionado": false,
+        "particao": "",
+        "origem": "javascript",
+        "fontes": [
+          "snapshot",
+          "onChanged"
+        ],
+        "injetado": true,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 1,
+        "valorAmostra": "189...(3 caracteres)",
+        "primeiraVez": "2026-09-28T15:39:24.562Z"
+      },
+      {
+        "nome": "jsdata",
+        "dominio": "privacy-test-pages.site",
+        "dominioRegistravel": "privacy-test-pages.site",
+        "path": "/privacy-protections/storage-blocking",
+        "terceiraParte": false,
+        "persistente": true,
+        "duracaoDias": 400,
+        "longoPrazo": true,
+        "expira": "2027-11-02T15:39:43.315Z",
+        "httpOnly": false,
+        "secure": true,
+        "sameSite": "lax",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "lax",
+        "aptoCrossSite": false,
+        "hostOnly": true,
+        "particionado": false,
+        "particao": "",
+        "origem": "javascript",
+        "fontes": [
+          "snapshot",
+          "onChanged"
+        ],
+        "injetado": true,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 1,
+        "valorAmostra": "189...(3 caracteres)",
+        "primeiraVez": "2026-09-28T15:39:24.562Z"
+      },
+      {
+        "nome": "jsdata_no_samesite",
+        "dominio": "privacy-test-pages.site",
+        "dominioRegistravel": "privacy-test-pages.site",
+        "path": "/",
+        "terceiraParte": false,
+        "persistente": true,
+        "duracaoDias": 400,
+        "longoPrazo": true,
+        "expira": "2027-11-02T15:39:43.315Z",
+        "httpOnly": false,
+        "secure": true,
+        "sameSite": "unspecified",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": true,
+        "hostOnly": true,
+        "particionado": false,
+        "particao": "",
+        "origem": "javascript",
+        "fontes": [
+          "snapshot",
+          "onChanged"
+        ],
+        "injetado": true,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 1,
+        "valorAmostra": "189...(3 caracteres)",
+        "primeiraVez": "2026-09-28T15:39:24.562Z"
+      },
+      {
+        "nome": "top_firstparty_headerdata",
+        "dominio": "privacy-test-pages.site",
+        "dominioRegistravel": "privacy-test-pages.site",
+        "path": "/",
+        "terceiraParte": false,
+        "persistente": true,
+        "duracaoDias": 10,
+        "longoPrazo": false,
+        "expira": "2026-10-08T15:39:43.000Z",
+        "httpOnly": true,
+        "secure": true,
+        "sameSite": "none",
+        "sameSiteDeclarado": "none",
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": true,
+        "hostOnly": true,
+        "particionado": false,
+        "particao": "",
+        "origem": "http",
+        "fontes": [
+          "snapshot",
+          "onChanged",
+          "header"
+        ],
+        "injetado": true,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "https://privacy-test-pages.site/set-cookie?value=189&name=top_firstparty_headerdata",
+        "escritas": 2,
+        "valorAmostra": "189...(3 caracteres)",
+        "primeiraVez": "2026-09-28T15:39:24.562Z"
+      },
+      {
+        "nome": "tpsdata",
+        "dominio": "privacy-test-pages.site",
+        "dominioRegistravel": "privacy-test-pages.site",
+        "path": "/privacy-protections/storage-blocking",
+        "terceiraParte": false,
+        "persistente": true,
+        "duracaoDias": 400,
+        "longoPrazo": true,
+        "expira": "2027-11-02T15:39:43.319Z",
+        "httpOnly": false,
+        "secure": false,
+        "sameSite": "unspecified",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": false,
+        "hostOnly": true,
+        "particionado": false,
+        "particao": "",
+        "origem": "javascript",
+        "fontes": [
+          "snapshot",
+          "onChanged"
+        ],
+        "injetado": true,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 1,
+        "valorAmostra": "189...(3 caracteres)",
+        "primeiraVez": "2026-09-28T15:39:24.562Z"
+      },
+      {
+        "nome": "tptdata",
+        "dominio": "privacy-test-pages.site",
+        "dominioRegistravel": "privacy-test-pages.site",
+        "path": "/privacy-protections/storage-blocking",
+        "terceiraParte": false,
+        "persistente": true,
+        "duracaoDias": 400,
+        "longoPrazo": true,
+        "expira": "2027-11-02T15:39:43.319Z",
+        "httpOnly": false,
+        "secure": false,
+        "sameSite": "unspecified",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": false,
+        "hostOnly": true,
+        "particionado": false,
+        "particao": "",
+        "origem": "javascript",
+        "fontes": [
+          "snapshot",
+          "onChanged"
+        ],
+        "injetado": true,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 1,
+        "valorAmostra": "189...(3 caracteres)",
+        "primeiraVez": "2026-09-28T15:39:24.562Z"
+      }
+    ]
+  },
+  "storage": [
+    {
+      "origem": "https://privacy-test-pages.site",
+      "dominio": "privacy-test-pages.site",
+      "terceiraParte": false,
+      "topo": true,
+      "frames": 1,
+      "coletas": 3,
+      "momento": "load+3s",
+      "localStorage": {
+        "disponivel": true,
+        "erro": "",
+        "chaves": 1,
+        "bytes": 14,
+        "amostra": [
+          "data"
+        ]
+      },
+      "sessionStorage": {
+        "disponivel": true,
+        "erro": "",
+        "chaves": 1,
+        "bytes": 14,
+        "amostra": [
+          "data"
+        ]
+      },
+      "picoBytesLocal": 14,
+      "picoBytesSessao": 14,
+      "indexedDB": {
+        "bancos": [
+          "data"
+        ],
+        "viaHook": true,
+        "erro": ""
+      },
+      "documentCookie": {
+        "quantidade": 6,
+        "nomes": [
+          "jsdata",
+          "tptdata",
+          "tpsdata",
+          "cookiestoredata",
+          "__Host-jsdata_host",
+          "jsdata_no_samesite"
+        ]
+      }
+    },
+    {
+      "origem": "https://convert.ad-company.site",
+      "dominio": "ad-company.site",
+      "terceiraParte": true,
+      "topo": false,
+      "frames": 2,
+      "coletas": 4,
+      "momento": "load",
+      "localStorage": {
+        "disponivel": true,
+        "erro": "",
+        "chaves": 1,
+        "bytes": 14,
+        "amostra": [
+          "data"
+        ]
+      },
+      "sessionStorage": {
+        "disponivel": true,
+        "erro": "",
+        "chaves": 1,
+        "bytes": 14,
+        "amostra": [
+          "data"
+        ]
+      },
+      "picoBytesLocal": 14,
+      "picoBytesSessao": 14,
+      "indexedDB": {
+        "bancos": [],
+        "viaHook": false,
+        "erro": ""
+      },
+      "documentCookie": {
+        "quantidade": 3,
+        "nomes": [
+          "jsdata",
+          "__Host-jsdata_host",
+          "jsdata_no_samesite"
+        ]
+      }
+    },
+    {
+      "origem": "https://good.third-party.site",
+      "dominio": "third-party.site",
+      "terceiraParte": true,
+      "topo": false,
+      "frames": 2,
+      "coletas": 4,
+      "momento": "load",
+      "localStorage": {
+        "disponivel": true,
+        "erro": "",
+        "chaves": 1,
+        "bytes": 14,
+        "amostra": [
+          "data"
+        ]
+      },
+      "sessionStorage": {
+        "disponivel": true,
+        "erro": "",
+        "chaves": 1,
+        "bytes": 14,
+        "amostra": [
+          "data"
+        ]
+      },
+      "picoBytesLocal": 14,
+      "picoBytesSessao": 14,
+      "indexedDB": {
+        "bancos": [
+          "data"
+        ],
+        "viaHook": true,
+        "erro": ""
+      },
+      "documentCookie": {
+        "quantidade": 3,
+        "nomes": [
+          "jsdata",
+          "__Host-jsdata_host",
+          "jsdata_no_samesite"
+        ]
+      }
+    }
+  ],
+  "fingerprint": {
+    "canvasFingerprint": false,
+    "canvas": [],
+    "vetores": []
+  },
+  "rastreamento": {
+    "resumo": {
+      "sincronismos": 0,
+      "paresSync": 0,
+      "vazamentosPrimeiraParte": 0,
+      "idsCompartilhados": 0,
+      "bounces": 0,
+      "redirecionamentosSemCookie": 0,
+      "decoracoes": 0
+    },
+    "sync": [],
+    "bounce": [],
+    "decoracao": []
+  },
+  "hijack": {
+    "resumo": {
+      "total": 0,
+      "porTipo": {},
+      "alta": 0,
+      "media": 0,
+      "baixa": 0
+    },
+    "indicios": []
+  },
+  "bloqueio": {
+    "total": 8,
+    "porDominio": [
+      {
+        "dominio": "third-party.site",
+        "bloqueadas": 8
+      }
+    ],
+    "lista": {
+      "ativo": true,
+      "carregada": true,
+      "totalSessao": 32,
+      "regras": [
+        {
+          "padrao": "bad.third-party.site",
+          "ativo": true,
+          "criadoEm": 1790609670647,
+          "bloqueiosSessao": 24
+        },
+        {
+          "padrao": "broken.third-party.site",
+          "ativo": true,
+          "criadoEm": 1790609977456,
+          "bloqueiosSessao": 8
+        }
+      ]
+    }
+  },
+  "erros": [],
+  "redirecionamentos": [
+    {
+      "requestId": "973",
+      "tipo": "main_frame",
+      "de": "https://privacy-test-pages.site/privacy-protections/storage-blocking/",
+      "para": "https://privacy-test-pages.site/privacy-protections/storage-blocking/",
+      "dominioDe": "privacy-test-pages.site",
+      "dominioPara": "privacy-test-pages.site",
+      "status": 0,
+      "setCookie": false,
+      "interno": false,
+      "ts": "2026-09-28T15:39:23.390Z"
+    },
+    {
+      "requestId": "974",
+      "tipo": "script",
+      "de": "https://privacy-test-pages.site/helpers/idb-wrapper.js",
+      "para": "https://privacy-test-pages.site/helpers/idb-wrapper.js",
+      "dominioDe": "privacy-test-pages.site",
+      "dominioPara": "privacy-test-pages.site",
+      "status": 0,
+      "setCookie": false,
+      "interno": false,
+      "ts": "2026-09-28T15:39:23.873Z"
+    },
+    {
+      "requestId": "975",
+      "tipo": "script",
+      "de": "https://privacy-test-pages.site/privacy-protections/storage-blocking/helpers/globals.js",
+      "para": "https://privacy-test-pages.site/privacy-protections/storage-blocking/helpers/globals.js",
+      "dominioDe": "privacy-test-pages.site",
+      "dominioPara": "privacy-test-pages.site",
+      "status": 0,
+      "setCookie": false,
+      "interno": false,
+      "ts": "2026-09-28T15:39:23.873Z"
+    },
+    {
+      "requestId": "976",
+      "tipo": "script",
+      "de": "https://privacy-test-pages.site/privacy-protections/storage-blocking/helpers/commonTests.js",
+      "para": "https://privacy-test-pages.site/privacy-protections/storage-blocking/helpers/commonTests.js",
+      "dominioDe": "privacy-test-pages.site",
+      "dominioPara": "privacy-test-pages.site",
+      "status": 0,
+      "setCookie": false,
+      "interno": false,
+      "ts": "2026-09-28T15:39:23.873Z"
+    },
+    {
+      "requestId": "977",
+      "tipo": "script",
+      "de": "https://broken.third-party.site/privacy-protections/storage-blocking/3rdparty.js",
+      "para": "https://broken.third-party.site/privacy-protections/storage-blocking/3rdparty.js",
+      "dominioDe": "third-party.site",
+      "dominioPara": "third-party.site",
+      "status": 0,
+      "setCookie": false,
+      "interno": false,
+      "ts": "2026-09-28T15:39:23.873Z"
+    },
+    {
+      "requestId": "978",
+      "tipo": "script",
+      "de": "https://good.third-party.site/privacy-protections/storage-blocking/3rdparty.js",
+      "para": "https://good.third-party.site/privacy-protections/storage-blocking/3rdparty.js",
+      "dominioDe": "third-party.site",
+      "dominioPara": "third-party.site",
+      "status": 0,
+      "setCookie": false,
+      "interno": false,
+      "ts": "2026-09-28T15:39:23.873Z"
+    },
+    {
+      "requestId": "979",
+      "tipo": "script",
+      "de": "https://privacy-test-pages.site/privacy-protections/storage-blocking/main.js",
+      "para": "https://privacy-test-pages.site/privacy-protections/storage-blocking/main.js",
+      "dominioDe": "privacy-test-pages.site",
+      "dominioPara": "privacy-test-pages.site",
+      "status": 0,
+      "setCookie": false,
+      "interno": false,
+      "ts": "2026-09-28T15:39:23.873Z"
+    },
+    {
+      "requestId": "980",
+      "tipo": "stylesheet",
+      "de": "https://privacy-test-pages.site/privacy-protections/storage-blocking/style.css",
+      "para": "https://privacy-test-pages.site/privacy-protections/storage-blocking/style.css",
+      "dominioDe": "privacy-test-pages.site",
+      "dominioPara": "privacy-test-pages.site",
+      "status": 0,
+      "setCookie": false,
+      "interno": false,
+      "ts": "2026-09-28T15:39:23.873Z"
+    },
+    {
+      "requestId": "982",
+      "tipo": "image",
+      "de": "https://privacy-test-pages.site/favicon.ico",
+      "para": "https://privacy-test-pages.site/favicon.ico",
+      "dominioDe": "privacy-test-pages.site",
+      "dominioPara": "privacy-test-pages.site",
+      "status": 0,
+      "setCookie": false,
+      "interno": false,
+      "ts": "2026-09-28T15:39:24.564Z"
+    },
+    {
+      "requestId": "984",
+      "tipo": "xmlhttprequest",
+      "de": "https://privacy-test-pages.site/cached-random-number",
+      "para": "https://privacy-test-pages.site/cached-random-number",
+      "dominioDe": "privacy-test-pages.site",
+      "dominioPara": "privacy-test-pages.site",
+      "status": 0,
+      "setCookie": false,
+      "interno": false,
+      "ts": "2026-09-28T15:39:43.090Z"
+    },
+    {
+      "requestId": "989",
+      "tipo": "xmlhttprequest",
+      "de": "https://privacy-test-pages.site/set-cookie?value=189&name=top_firstparty_headerdata",
+      "para": "https://privacy-test-pages.site/set-cookie?value=189&name=top_firstparty_headerdata",
+      "dominioDe": "privacy-test-pages.site",
+      "dominioPara": "privacy-test-pages.site",
+      "status": 0,
+      "setCookie": false,
+      "interno": false,
+      "ts": "2026-09-28T15:39:43.336Z"
+    },
+    {
+      "requestId": "990",
+      "tipo": "xmlhttprequest",
+      "de": "https://good.third-party.site/set-cookie?value=189&name=top_thirdparty_headerdata",
+      "para": "https://good.third-party.site/set-cookie?value=189&name=top_thirdparty_headerdata",
+      "dominioDe": "third-party.site",
+      "dominioPara": "third-party.site",
+      "status": 0,
+      "setCookie": false,
+      "interno": false,
+      "ts": "2026-09-28T15:39:43.336Z"
+    },
+    {
+      "requestId": "992",
+      "tipo": "xmlhttprequest",
+      "de": "https://privacy-test-pages.site/privacy-protections/storage-blocking/service-worker-set-cookie?name=swcookiestoredata&data=189",
+      "para": "https://privacy-test-pages.site/privacy-protections/storage-blocking/service-worker-set-cookie?name=swcookiestoredata&data=189",
+      "dominioDe": "privacy-test-pages.site",
+      "dominioPara": "privacy-test-pages.site",
+      "status": 0,
+      "setCookie": false,
+      "interno": false,
+      "ts": "2026-09-28T15:39:43.529Z"
+    },
+    {
+      "requestId": "1006",
+      "tipo": "xmlhttprequest",
+      "de": "https://privacy-test-pages.site/reflect-headers",
+      "para": "https://privacy-test-pages.site/reflect-headers",
+      "dominioDe": "privacy-test-pages.site",
+      "dominioPara": "privacy-test-pages.site",
+      "status": 0,
+      "setCookie": false,
+      "interno": false,
+      "ts": "2026-09-28T15:39:49.731Z"
+    },
+    {
+      "requestId": "1007",
+      "tipo": "xmlhttprequest",
+      "de": "https://good.third-party.site/reflect-headers",
+      "para": "https://good.third-party.site/reflect-headers",
+      "dominioDe": "third-party.site",
+      "dominioPara": "third-party.site",
+      "status": 0,
+      "setCookie": false,
+      "interno": false,
+      "ts": "2026-09-28T15:39:49.731Z"
+    },
+    {
+      "requestId": "1012",
+      "tipo": "xmlhttprequest",
+      "de": "https://privacy-test-pages.site/cached-random-number",
+      "para": "https://privacy-test-pages.site/cached-random-number",
+      "dominioDe": "privacy-test-pages.site",
+      "dominioPara": "privacy-test-pages.site",
+      "status": 0,
+      "setCookie": false,
+      "interno": false,
+      "ts": "2026-09-28T15:39:49.734Z"
+    },
+    {
+      "requestId": "1013",
+      "tipo": "xmlhttprequest",
+      "de": "https://privacy-test-pages.site/privacy-protections/storage-blocking/service-worker-data",
+      "para": "https://privacy-test-pages.site/privacy-protections/storage-blocking/service-worker-data",
+      "dominioDe": "privacy-test-pages.site",
+      "dominioPara": "privacy-test-pages.site",
+      "status": 0,
+      "setCookie": false,
+      "interno": false,
+      "ts": "2026-09-28T15:39:49.735Z"
+    }
+  ],
+  "requestLog": [
+    {
+      "url": "https://privacy-test-pages.site/privacy-protections/storage-blocking/",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "main_frame",
+      "ts": "2026-09-28T15:39:23.388Z",
+      "terceiraParte": false,
+      "requestId": "973"
+    },
+    {
+      "url": "https://privacy-test-pages.site/privacy-protections/storage-blocking/",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "main_frame",
+      "ts": "2026-09-28T15:39:23.398Z",
+      "terceiraParte": false,
+      "requestId": "973"
+    },
+    {
+      "url": "https://privacy-test-pages.site/helpers/idb-wrapper.js",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:23.867Z",
+      "terceiraParte": false,
+      "requestId": "974"
+    },
+    {
+      "url": "https://privacy-test-pages.site/privacy-protections/storage-blocking/helpers/globals.js",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:23.867Z",
+      "terceiraParte": false,
+      "requestId": "975"
+    },
+    {
+      "url": "https://privacy-test-pages.site/privacy-protections/storage-blocking/helpers/commonTests.js",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:23.868Z",
+      "terceiraParte": false,
+      "requestId": "976"
+    },
+    {
+      "url": "https://broken.third-party.site/privacy-protections/storage-blocking/3rdparty.js",
+      "dominio": "third-party.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:23.868Z",
+      "terceiraParte": true,
+      "requestId": "977"
+    },
+    {
+      "url": "https://good.third-party.site/privacy-protections/storage-blocking/3rdparty.js",
+      "dominio": "third-party.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:23.868Z",
+      "terceiraParte": true,
+      "requestId": "978"
+    },
+    {
+      "url": "https://privacy-test-pages.site/privacy-protections/storage-blocking/main.js",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:23.869Z",
+      "terceiraParte": false,
+      "requestId": "979"
+    },
+    {
+      "url": "https://privacy-test-pages.site/privacy-protections/storage-blocking/style.css",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "stylesheet",
+      "ts": "2026-09-28T15:39:23.870Z",
+      "terceiraParte": false,
+      "requestId": "980"
+    },
+    {
+      "url": "https://privacy-test-pages.site/helpers/idb-wrapper.js",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:23.878Z",
+      "terceiraParte": false,
+      "requestId": "974"
+    },
+    {
+      "url": "https://privacy-test-pages.site/privacy-protections/storage-blocking/helpers/globals.js",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:23.879Z",
+      "terceiraParte": false,
+      "requestId": "975"
+    },
+    {
+      "url": "https://privacy-test-pages.site/privacy-protections/storage-blocking/helpers/commonTests.js",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:23.879Z",
+      "terceiraParte": false,
+      "requestId": "976"
+    },
+    {
+      "url": "https://broken.third-party.site/privacy-protections/storage-blocking/3rdparty.js",
+      "dominio": "third-party.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:23.879Z",
+      "terceiraParte": true,
+      "requestId": "977"
+    },
+    {
+      "url": "https://good.third-party.site/privacy-protections/storage-blocking/3rdparty.js",
+      "dominio": "third-party.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:23.879Z",
+      "terceiraParte": true,
+      "requestId": "978"
+    },
+    {
+      "url": "https://privacy-test-pages.site/privacy-protections/storage-blocking/main.js",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:23.879Z",
+      "terceiraParte": false,
+      "requestId": "979"
+    },
+    {
+      "url": "https://privacy-test-pages.site/privacy-protections/storage-blocking/style.css",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "stylesheet",
+      "ts": "2026-09-28T15:39:23.879Z",
+      "terceiraParte": false,
+      "requestId": "980"
+    },
+    {
+      "url": "https://privacy-test-pages.site/favicon.ico",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "image",
+      "ts": "2026-09-28T15:39:24.557Z",
+      "terceiraParte": false,
+      "requestId": "982"
+    },
+    {
+      "url": "https://privacy-test-pages.site/favicon.ico",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "image",
+      "ts": "2026-09-28T15:39:24.565Z",
+      "terceiraParte": false,
+      "requestId": "982"
+    },
+    {
+      "url": "https://privacy-test-pages.site/cached-random-number",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:43.086Z",
+      "terceiraParte": false,
+      "requestId": "984"
+    },
+    {
+      "url": "https://privacy-test-pages.site/cached-random-number",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:43.093Z",
+      "terceiraParte": false,
+      "requestId": "984"
+    },
+    {
+      "url": "https://good.third-party.site/privacy-protections/storage-blocking/iframe.html?data=189",
+      "dominio": "third-party.site",
+      "tipo": "sub_frame",
+      "ts": "2026-09-28T15:39:43.309Z",
+      "terceiraParte": true,
+      "requestId": "985"
+    },
+    {
+      "url": "https://broken.third-party.site/privacy-protections/storage-blocking/iframe.html?data=189",
+      "dominio": "third-party.site",
+      "tipo": "sub_frame",
+      "ts": "2026-09-28T15:39:43.310Z",
+      "terceiraParte": true,
+      "requestId": "986",
+      "erro": "NS_ERROR_ABORT"
+    },
+    {
+      "url": "https://convert.ad-company.site/privacy-protections/storage-blocking/iframe.html?data=189",
+      "dominio": "ad-company.site",
+      "tipo": "sub_frame",
+      "ts": "2026-09-28T15:39:43.313Z",
+      "terceiraParte": true,
+      "requestId": "987"
+    },
+    {
+      "url": "https://privacy-test-pages.site/set-cookie?value=189&name=top_firstparty_headerdata",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:43.331Z",
+      "terceiraParte": false,
+      "requestId": "989"
+    },
+    {
+      "url": "https://good.third-party.site/set-cookie?value=189&name=top_thirdparty_headerdata",
+      "dominio": "third-party.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:43.331Z",
+      "terceiraParte": true,
+      "requestId": "990"
+    },
+    {
+      "url": "https://broken.third-party.site/set-cookie?value=189&name=top_tracker_headerdata",
+      "dominio": "third-party.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:43.331Z",
+      "terceiraParte": true,
+      "requestId": "991",
+      "erro": "NS_ERROR_ABORT"
+    },
+    {
+      "url": "https://privacy-test-pages.site/set-cookie?value=189&name=top_firstparty_headerdata",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:43.336Z",
+      "terceiraParte": false,
+      "requestId": "989"
+    },
+    {
+      "url": "https://good.third-party.site/set-cookie?value=189&name=top_thirdparty_headerdata",
+      "dominio": "third-party.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:43.336Z",
+      "terceiraParte": true,
+      "requestId": "990"
+    },
+    {
+      "url": "https://privacy-test-pages.site/privacy-protections/storage-blocking/service-worker-set-cookie?name=swcookiestoredata&data=189",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:43.523Z",
+      "terceiraParte": false,
+      "requestId": "992"
+    },
+    {
+      "url": "https://privacy-test-pages.site/privacy-protections/storage-blocking/service-worker-set-cookie?name=swcookiestoredata&data=189",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:43.529Z",
+      "terceiraParte": false,
+      "requestId": "992"
+    },
+    {
+      "url": "https://good.third-party.site/helpers/idb-wrapper.js",
+      "dominio": "third-party.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:43.546Z",
+      "terceiraParte": true,
+      "requestId": "993"
+    },
+    {
+      "url": "https://good.third-party.site/privacy-protections/storage-blocking/helpers/globals.js",
+      "dominio": "third-party.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:43.546Z",
+      "terceiraParte": true,
+      "requestId": "994"
+    },
+    {
+      "url": "https://good.third-party.site/privacy-protections/storage-blocking/helpers/commonTests.js",
+      "dominio": "third-party.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:43.547Z",
+      "terceiraParte": true,
+      "requestId": "995"
+    },
+    {
+      "url": "https://good.third-party.site/privacy-protections/storage-blocking/iframe.js",
+      "dominio": "third-party.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:43.547Z",
+      "terceiraParte": true,
+      "requestId": "996"
+    },
+    {
+      "url": "https://convert.ad-company.site/helpers/idb-wrapper.js",
+      "dominio": "ad-company.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:43.987Z",
+      "terceiraParte": true,
+      "requestId": "997",
+      "erro": "NS_ERROR_CORRUPTED_CONTENT"
+    },
+    {
+      "url": "https://convert.ad-company.site/privacy-protections/storage-blocking/helpers/globals.js",
+      "dominio": "ad-company.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:43.987Z",
+      "terceiraParte": true,
+      "requestId": "998"
+    },
+    {
+      "url": "https://convert.ad-company.site/privacy-protections/storage-blocking/helpers/commonTests.js",
+      "dominio": "ad-company.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:43.987Z",
+      "terceiraParte": true,
+      "requestId": "999"
+    },
+    {
+      "url": "https://convert.ad-company.site/privacy-protections/storage-blocking/iframe.js",
+      "dominio": "ad-company.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:43.987Z",
+      "terceiraParte": true,
+      "requestId": "1000"
+    },
+    {
+      "url": "https://good.third-party.site/set-cookie?value=189&name=thirdparty_firstparty_headerdata",
+      "dominio": "third-party.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:44.128Z",
+      "terceiraParte": true,
+      "requestId": "1001"
+    },
+    {
+      "url": "https://broken.third-party.site/set-cookie?value=189&name=thirdparty_tracker_headerdata",
+      "dominio": "third-party.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:44.128Z",
+      "terceiraParte": true,
+      "requestId": "1002",
+      "erro": "NS_ERROR_ABORT"
+    },
+    {
+      "url": "https://convert.ad-company.site/set-cookie?value=189&name=thirdpartyAd_firstparty_headerdata",
+      "dominio": "ad-company.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:44.487Z",
+      "terceiraParte": true,
+      "requestId": "1003"
+    },
+    {
+      "url": "https://good.third-party.site/set-cookie?value=189&name=thirdpartyAd_thirdparty_headerdata",
+      "dominio": "third-party.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:44.487Z",
+      "terceiraParte": true,
+      "requestId": "1004"
+    },
+    {
+      "url": "https://broken.third-party.site/set-cookie?value=189&name=thirdpartyAd_tracker_headerdata",
+      "dominio": "third-party.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:44.488Z",
+      "terceiraParte": true,
+      "requestId": "1005",
+      "erro": "NS_ERROR_ABORT"
+    },
+    {
+      "url": "https://privacy-test-pages.site/reflect-headers",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:49.723Z",
+      "terceiraParte": false,
+      "requestId": "1006"
+    },
+    {
+      "url": "https://good.third-party.site/reflect-headers",
+      "dominio": "third-party.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:49.724Z",
+      "terceiraParte": true,
+      "requestId": "1007"
+    },
+    {
+      "url": "https://broken.third-party.site/reflect-headers",
+      "dominio": "third-party.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:49.724Z",
+      "terceiraParte": true,
+      "requestId": "1008",
+      "erro": "NS_ERROR_ABORT"
+    },
+    {
+      "url": "https://good.third-party.site/privacy-protections/storage-blocking/iframe.html",
+      "dominio": "third-party.site",
+      "tipo": "sub_frame",
+      "ts": "2026-09-28T15:39:49.728Z",
+      "terceiraParte": true,
+      "requestId": "1009"
+    },
+    {
+      "url": "https://broken.third-party.site/privacy-protections/storage-blocking/iframe.html",
+      "dominio": "third-party.site",
+      "tipo": "sub_frame",
+      "ts": "2026-09-28T15:39:49.729Z",
+      "terceiraParte": true,
+      "requestId": "1010",
+      "erro": "NS_ERROR_ABORT"
+    },
+    {
+      "url": "https://convert.ad-company.site/privacy-protections/storage-blocking/iframe.html",
+      "dominio": "ad-company.site",
+      "tipo": "sub_frame",
+      "ts": "2026-09-28T15:39:49.731Z",
+      "terceiraParte": true,
+      "requestId": "1011"
+    },
+    {
+      "url": "https://privacy-test-pages.site/cached-random-number",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:49.731Z",
+      "terceiraParte": false,
+      "requestId": "1012"
+    },
+    {
+      "url": "https://privacy-test-pages.site/privacy-protections/storage-blocking/service-worker-data",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:49.731Z",
+      "terceiraParte": false,
+      "requestId": "1013"
+    },
+    {
+      "url": "https://privacy-test-pages.site/reflect-headers",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:49.735Z",
+      "terceiraParte": false,
+      "requestId": "1006"
+    },
+    {
+      "url": "https://good.third-party.site/reflect-headers",
+      "dominio": "third-party.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:49.736Z",
+      "terceiraParte": true,
+      "requestId": "1007"
+    },
+    {
+      "url": "https://privacy-test-pages.site/cached-random-number",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:49.738Z",
+      "terceiraParte": false,
+      "requestId": "1012"
+    },
+    {
+      "url": "https://convert.ad-company.site/helpers/idb-wrapper.js",
+      "dominio": "ad-company.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:49.964Z",
+      "terceiraParte": true,
+      "requestId": "1014",
+      "erro": "NS_ERROR_CORRUPTED_CONTENT"
+    },
+    {
+      "url": "https://good.third-party.site/helpers/idb-wrapper.js",
+      "dominio": "third-party.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:49.964Z",
+      "terceiraParte": true,
+      "requestId": "1015"
+    },
+    {
+      "url": "https://convert.ad-company.site/privacy-protections/storage-blocking/helpers/globals.js",
+      "dominio": "ad-company.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:49.964Z",
+      "terceiraParte": true,
+      "requestId": "1016"
+    },
+    {
+      "url": "https://good.third-party.site/privacy-protections/storage-blocking/helpers/globals.js",
+      "dominio": "third-party.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:49.964Z",
+      "terceiraParte": true,
+      "requestId": "1017"
+    },
+    {
+      "url": "https://convert.ad-company.site/privacy-protections/storage-blocking/helpers/commonTests.js",
+      "dominio": "ad-company.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:49.965Z",
+      "terceiraParte": true,
+      "requestId": "1018"
+    },
+    {
+      "url": "https://good.third-party.site/privacy-protections/storage-blocking/helpers/commonTests.js",
+      "dominio": "third-party.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:49.965Z",
+      "terceiraParte": true,
+      "requestId": "1019"
+    },
+    {
+      "url": "https://convert.ad-company.site/privacy-protections/storage-blocking/iframe.js",
+      "dominio": "ad-company.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:49.965Z",
+      "terceiraParte": true,
+      "requestId": "1020"
+    },
+    {
+      "url": "https://good.third-party.site/privacy-protections/storage-blocking/iframe.js",
+      "dominio": "third-party.site",
+      "tipo": "script",
+      "ts": "2026-09-28T15:39:49.965Z",
+      "terceiraParte": true,
+      "requestId": "1021"
+    },
+    {
+      "url": "https://good.third-party.site/reflect-headers",
+      "dominio": "third-party.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:50.235Z",
+      "terceiraParte": true,
+      "requestId": "1022"
+    },
+    {
+      "url": "https://broken.third-party.site/reflect-headers",
+      "dominio": "third-party.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:50.235Z",
+      "terceiraParte": true,
+      "requestId": "1023",
+      "erro": "NS_ERROR_ABORT"
+    },
+    {
+      "url": "https://convert.ad-company.site/reflect-headers",
+      "dominio": "ad-company.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:50.416Z",
+      "terceiraParte": true,
+      "requestId": "1024"
+    },
+    {
+      "url": "https://good.third-party.site/reflect-headers",
+      "dominio": "third-party.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:50.416Z",
+      "terceiraParte": true,
+      "requestId": "1025"
+    },
+    {
+      "url": "https://broken.third-party.site/reflect-headers",
+      "dominio": "third-party.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T15:39:50.416Z",
+      "terceiraParte": true,
+      "requestId": "1026",
+      "erro": "NS_ERROR_ABORT"
+    }
+  ]
+}

@@ -1,0 +1,716 @@
+{
+  "ferramenta": "PrivacyLens",
+  "versao": "1.0.0",
+  "geradoEm": "2026-09-28T14:57:09.656Z",
+  "pagina": {
+    "url": "https://privacy-test-pages.site/privacy-protections/fingerprinting/",
+    "dominio": "privacy-test-pages.site",
+    "inicioCarregamento": "2026-09-28T14:56:33.289Z",
+    "cookieStoreId": "firefox-default",
+    "navegacao": {
+      "requestId": "602",
+      "origem": "https://www.first-party.site/privacy-protections/storage-partitioning/",
+      "origemDominio": "first-party.site",
+      "inicio": "https://privacy-test-pages.site/privacy-protections/fingerprinting/",
+      "ts": 1790607393288,
+      "restauradaDoCache": false,
+      "anteriorVisto": true
+    },
+    "usuarioInteragiu": true
+  },
+  "score": {
+    "valor": 85,
+    "nota": "A",
+    "totalPenalidades": 15,
+    "criterios": [
+      {
+        "id": "terceiros",
+        "nome": "Domínios de 3ª parte contatados",
+        "peso": 15,
+        "observado": 0,
+        "detalhe": "nenhum",
+        "penalidade": 0,
+        "formula": "min(15, 3 * log2(1 + n))",
+        "justificativa": "Superfície de exposição: cada terceiro recebe IP, User-Agent e a página visitada. Escala logarítmica porque o primeiro terceiro pesa muito mais que o trigésimo (a penalidade atinge o teto em 31 terceiros)."
+      },
+      {
+        "id": "cookies3p",
+        "nome": "Cookies de 3ª parte persistentes",
+        "peso": 20,
+        "observado": 0,
+        "detalhe": "nenhum",
+        "penalidade": 0,
+        "formula": "min(20, 4 * n)",
+        "justificativa": "Identificador estável entre sites: o mecanismo clássico de rastreamento."
+      },
+      {
+        "id": "cookies1pLongos",
+        "nome": "Cookies de 1ª parte persistentes > 90 dias",
+        "peso": 5,
+        "observado": 0,
+        "detalhe": "nenhum",
+        "penalidade": 0,
+        "formula": "min(5, 1 * n)",
+        "justificativa": "Cookie de primeira parte de longa duração funciona como identificador do visitante (ex.: _ga, _fbp), lido por scripts de terceiros embutidos na página."
+      },
+      {
+        "id": "storage3p",
+        "nome": "Storage HTML5 de 3ª parte (em iframe)",
+        "peso": 10,
+        "observado": 0,
+        "detalhe": "nenhum",
+        "penalidade": 0,
+        "formula": "min(10, 3 * n)",
+        "justificativa": "Persistência fora do ciclo de vida do cookie: sobrevive à limpeza de cookies e não é controlada pelas preferências de cookie."
+      },
+      {
+        "id": "localStorage1p",
+        "nome": "Volume de localStorage de 1ª parte",
+        "peso": 5,
+        "observado": 14,
+        "detalhe": "0 KB",
+        "penalidade": 0,
+        "formula": "min(5, bytes / 50 KB)",
+        "justificativa": "Indicador de supercookie ou de estado excessivo guardado no navegador do usuário."
+      },
+      {
+        "id": "canvas",
+        "nome": "Canvas fingerprinting",
+        "peso": 15,
+        "observado": true,
+        "detalhe": "por privacy-test-pages.site",
+        "penalidade": 15,
+        "formula": "binário: 15 se detectado",
+        "justificativa": "Identificação sem consentimento e sem estado: não é removida limpando cookies e o usuário não consegue evitar."
+      },
+      {
+        "id": "sync",
+        "nome": "Cookie sync / bounce tracking",
+        "peso": 15,
+        "observado": {
+          "sincronismos": 0,
+          "bounce": false
+        },
+        "detalhe": "não detectado",
+        "penalidade": 0,
+        "formula": "8 por sync distinto, +15 se houver bounce, teto 15",
+        "justificativa": "Une as identidades do usuário em domínios diferentes, anulando o isolamento de cookies por site."
+      },
+      {
+        "id": "hijack",
+        "nome": "Indícios de hijacking / hook",
+        "peso": 10,
+        "observado": 0,
+        "detalhe": "nenhum",
+        "penalidade": 0,
+        "formula": "5 por indício de severidade média ou alta, teto 10",
+        "justificativa": "Vai além do rastreamento: é controle do navegador (canal de comando, interceptação de chamadas)."
+      },
+      {
+        "id": "sessao",
+        "nome": "Session recording / keylogging",
+        "peso": 5,
+        "observado": false,
+        "detalhe": "não detectado",
+        "penalidade": 0,
+        "formula": "binário: 5 se detectado",
+        "justificativa": "Captura o conteúdo digitado e os movimentos do usuário, não só metadados."
+      }
+    ],
+    "informativo": {
+      "facebookPixel": false,
+      "googleRemarketing": false
+    },
+    "calculadoEm": 1790607429656
+  },
+  "requisicoes": {
+    "total": 9,
+    "primeiraParte": 9,
+    "terceiraParte": 0,
+    "erros": 0,
+    "dominiosTerceiros": 0,
+    "logDescartadas": 0
+  },
+  "terceiros": [],
+  "cookies": {
+    "resumo": {
+      "injetados": 0,
+      "preexistentes": 7,
+      "removidos": 0,
+      "primeiraParte": 0,
+      "terceiraParte": 0,
+      "sessao": 0,
+      "persistente": 0,
+      "matriz": {
+        "primeira": {
+          "sessao": 0,
+          "persistente": 0
+        },
+        "terceira": {
+          "sessao": 0,
+          "persistente": 0
+        }
+      },
+      "terceiraPersistente": 0,
+      "primeiraLongoPrazo": 0,
+      "longoPrazo": 0,
+      "aptoCrossSite": 0,
+      "httpOnly": 0,
+      "secure": 0,
+      "particionados": 0,
+      "naoArmazenados": 0,
+      "viaHttp": 0,
+      "viaJavascript": 0
+    },
+    "snapshotEm": "2026-09-28T14:56:39.891Z",
+    "descartados": 0,
+    "lista": [
+      {
+        "nome": "__Host-jsdata_host",
+        "dominio": "privacy-test-pages.site",
+        "dominioRegistravel": "privacy-test-pages.site",
+        "path": "/",
+        "terceiraParte": false,
+        "persistente": true,
+        "duracaoDias": 400,
+        "longoPrazo": true,
+        "expira": "2027-11-02T14:54:05.960Z",
+        "httpOnly": false,
+        "secure": true,
+        "sameSite": "lax",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "lax",
+        "aptoCrossSite": false,
+        "hostOnly": true,
+        "particionado": false,
+        "particao": "",
+        "origem": "preexistente",
+        "fontes": [
+          "snapshot"
+        ],
+        "injetado": false,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 0,
+        "valorAmostra": "114...(3 caracteres)",
+        "primeiraVez": "2026-09-28T14:56:34.886Z"
+      },
+      {
+        "nome": "cookiestoredata",
+        "dominio": "privacy-test-pages.site",
+        "dominioRegistravel": "privacy-test-pages.site",
+        "path": "/",
+        "terceiraParte": false,
+        "persistente": true,
+        "duracaoDias": 400,
+        "longoPrazo": true,
+        "expira": "2027-11-02T14:54:05.965Z",
+        "httpOnly": false,
+        "secure": true,
+        "sameSite": "strict",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "strict",
+        "aptoCrossSite": false,
+        "hostOnly": true,
+        "particionado": false,
+        "particao": "",
+        "origem": "preexistente",
+        "fontes": [
+          "snapshot"
+        ],
+        "injetado": false,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 0,
+        "valorAmostra": "114...(3 caracteres)",
+        "primeiraVez": "2026-09-28T14:56:34.886Z"
+      },
+      {
+        "nome": "jsdata",
+        "dominio": "privacy-test-pages.site",
+        "dominioRegistravel": "privacy-test-pages.site",
+        "path": "/privacy-protections/storage-blocking",
+        "terceiraParte": false,
+        "persistente": true,
+        "duracaoDias": 400,
+        "longoPrazo": true,
+        "expira": "2027-11-02T14:54:05.960Z",
+        "httpOnly": false,
+        "secure": true,
+        "sameSite": "lax",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "lax",
+        "aptoCrossSite": false,
+        "hostOnly": true,
+        "particionado": false,
+        "particao": "",
+        "origem": "preexistente",
+        "fontes": [
+          "snapshot"
+        ],
+        "injetado": false,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 0,
+        "valorAmostra": "114...(3 caracteres)",
+        "primeiraVez": "2026-09-28T14:56:34.886Z"
+      },
+      {
+        "nome": "jsdata_no_samesite",
+        "dominio": "privacy-test-pages.site",
+        "dominioRegistravel": "privacy-test-pages.site",
+        "path": "/",
+        "terceiraParte": false,
+        "persistente": true,
+        "duracaoDias": 400,
+        "longoPrazo": true,
+        "expira": "2027-11-02T14:54:05.960Z",
+        "httpOnly": false,
+        "secure": true,
+        "sameSite": "unspecified",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": true,
+        "hostOnly": true,
+        "particionado": false,
+        "particao": "",
+        "origem": "preexistente",
+        "fontes": [
+          "snapshot"
+        ],
+        "injetado": false,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 0,
+        "valorAmostra": "114...(3 caracteres)",
+        "primeiraVez": "2026-09-28T14:56:34.886Z"
+      },
+      {
+        "nome": "top_firstparty_headerdata",
+        "dominio": "privacy-test-pages.site",
+        "dominioRegistravel": "privacy-test-pages.site",
+        "path": "/",
+        "terceiraParte": false,
+        "persistente": true,
+        "duracaoDias": 10,
+        "longoPrazo": false,
+        "expira": "2026-10-08T14:54:06.136Z",
+        "httpOnly": true,
+        "secure": true,
+        "sameSite": "none",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": true,
+        "hostOnly": true,
+        "particionado": false,
+        "particao": "",
+        "origem": "preexistente",
+        "fontes": [
+          "snapshot"
+        ],
+        "injetado": false,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 0,
+        "valorAmostra": "114...(3 caracteres)",
+        "primeiraVez": "2026-09-28T14:56:34.886Z"
+      },
+      {
+        "nome": "tpsdata",
+        "dominio": "privacy-test-pages.site",
+        "dominioRegistravel": "privacy-test-pages.site",
+        "path": "/privacy-protections/storage-blocking",
+        "terceiraParte": false,
+        "persistente": true,
+        "duracaoDias": 400,
+        "longoPrazo": true,
+        "expira": "2027-11-02T14:54:05.961Z",
+        "httpOnly": false,
+        "secure": false,
+        "sameSite": "unspecified",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": false,
+        "hostOnly": true,
+        "particionado": false,
+        "particao": "",
+        "origem": "preexistente",
+        "fontes": [
+          "snapshot"
+        ],
+        "injetado": false,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 0,
+        "valorAmostra": "114...(3 caracteres)",
+        "primeiraVez": "2026-09-28T14:56:34.886Z"
+      },
+      {
+        "nome": "tptdata",
+        "dominio": "privacy-test-pages.site",
+        "dominioRegistravel": "privacy-test-pages.site",
+        "path": "/privacy-protections/storage-blocking",
+        "terceiraParte": false,
+        "persistente": true,
+        "duracaoDias": 400,
+        "longoPrazo": true,
+        "expira": "2027-11-02T14:54:05.961Z",
+        "httpOnly": false,
+        "secure": false,
+        "sameSite": "unspecified",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": false,
+        "hostOnly": true,
+        "particionado": false,
+        "particao": "",
+        "origem": "preexistente",
+        "fontes": [
+          "snapshot"
+        ],
+        "injetado": false,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 0,
+        "valorAmostra": "114...(3 caracteres)",
+        "primeiraVez": "2026-09-28T14:56:34.886Z"
+      }
+    ]
+  },
+  "storage": [
+    {
+      "origem": "https://privacy-test-pages.site",
+      "dominio": "privacy-test-pages.site",
+      "terceiraParte": false,
+      "topo": true,
+      "frames": 1,
+      "coletas": 3,
+      "momento": "load+3s",
+      "localStorage": {
+        "disponivel": true,
+        "erro": "",
+        "chaves": 1,
+        "bytes": 14,
+        "amostra": [
+          "data"
+        ]
+      },
+      "sessionStorage": {
+        "disponivel": true,
+        "erro": "",
+        "chaves": 1,
+        "bytes": 14,
+        "amostra": [
+          "data"
+        ]
+      },
+      "picoBytesLocal": 14,
+      "picoBytesSessao": 14,
+      "indexedDB": {
+        "bancos": [
+          "data"
+        ],
+        "viaHook": false,
+        "erro": ""
+      },
+      "documentCookie": {
+        "quantidade": 3,
+        "nomes": [
+          "__Host-jsdata_host",
+          "jsdata_no_samesite",
+          "cookiestoredata"
+        ]
+      }
+    }
+  ],
+  "fingerprint": {
+    "canvasFingerprint": true,
+    "canvas": [
+      {
+        "fingerprint": true,
+        "script": "https://privacy-test-pages.site/privacy-protections/fingerprinting/helpers/tests.js",
+        "dominioScript": "privacy-test-pages.site",
+        "terceiraParte": false,
+        "metodo": "toDataURL",
+        "largura": 2000,
+        "altura": 200,
+        "caracteresDistintos": 30,
+        "cores": 2,
+        "amostraTexto": "Cwm fjordbank glyphs vext quiz, ",
+        "criterios": {
+          "tamanho": true,
+          "texto": true,
+          "leitura": true,
+          "oculto": true
+        },
+        "frameOrigem": "https://privacy-test-pages.site",
+        "frameId": 0,
+        "ts": "2026-09-28T14:56:37.143Z"
+      },
+      {
+        "fingerprint": false,
+        "script": "https://privacy-test-pages.site/privacy-protections/fingerprinting/helpers/tests.js",
+        "dominioScript": "privacy-test-pages.site",
+        "terceiraParte": false,
+        "metodo": "getImageData",
+        "largura": 2000,
+        "altura": 200,
+        "caracteresDistintos": 30,
+        "cores": 2,
+        "amostraTexto": "Cwm fjordbank glyphs vext quiz, ",
+        "criterios": {
+          "tamanho": true,
+          "texto": true,
+          "leitura": true,
+          "oculto": false
+        },
+        "frameOrigem": "https://privacy-test-pages.site",
+        "frameId": 0,
+        "ts": "2026-09-28T14:56:37.199Z"
+      },
+      {
+        "fingerprint": false,
+        "script": "https://privacy-test-pages.site/privacy-protections/fingerprinting/helpers/tests.js",
+        "dominioScript": "privacy-test-pages.site",
+        "terceiraParte": false,
+        "metodo": "toDataURL",
+        "largura": 2000,
+        "altura": 200,
+        "caracteresDistintos": 30,
+        "cores": 2,
+        "amostraTexto": "Cwm fjordbank glyphs vext quiz, ",
+        "criterios": {
+          "tamanho": true,
+          "texto": true,
+          "leitura": true,
+          "oculto": false
+        },
+        "frameOrigem": "https://privacy-test-pages.site",
+        "frameId": 0,
+        "ts": "2026-09-28T14:56:37.201Z"
+      }
+    ],
+    "vetores": [
+      {
+        "vetor": "navigator.hardwareConcurrency",
+        "terceiraParte": false,
+        "frames": 1,
+        "scripts": [
+          {
+            "script": "https://privacy-test-pages.site/privacy-protections/fingerprinting/helpers/tests.js",
+            "dominio": "privacy-test-pages.site",
+            "terceiraParte": false
+          }
+        ]
+      },
+      {
+        "vetor": "navigator.languages",
+        "terceiraParte": false,
+        "frames": 1,
+        "scripts": [
+          {
+            "script": "https://privacy-test-pages.site/privacy-protections/fingerprinting/helpers/tests.js",
+            "dominio": "privacy-test-pages.site",
+            "terceiraParte": false
+          }
+        ]
+      },
+      {
+        "vetor": "navigator.plugins",
+        "terceiraParte": false,
+        "frames": 1,
+        "scripts": [
+          {
+            "script": "https://privacy-test-pages.site/privacy-protections/fingerprinting/helpers/tests.js",
+            "dominio": "privacy-test-pages.site",
+            "terceiraParte": false
+          }
+        ]
+      },
+      {
+        "vetor": "screen",
+        "terceiraParte": false,
+        "frames": 1,
+        "scripts": [
+          {
+            "script": "https://privacy-test-pages.site/privacy-protections/fingerprinting/helpers/tests.js",
+            "dominio": "privacy-test-pages.site",
+            "terceiraParte": false
+          }
+        ]
+      },
+      {
+        "vetor": "webgl_parametros",
+        "terceiraParte": false,
+        "frames": 1,
+        "scripts": [
+          {
+            "script": "https://privacy-test-pages.site/privacy-protections/fingerprinting/helpers/tests.js",
+            "dominio": "privacy-test-pages.site",
+            "terceiraParte": false
+          }
+        ]
+      },
+      {
+        "vetor": "webrtc",
+        "terceiraParte": false,
+        "frames": 1,
+        "scripts": [
+          {
+            "script": "https://privacy-test-pages.site/privacy-protections/fingerprinting/helpers/tests.js",
+            "dominio": "privacy-test-pages.site",
+            "terceiraParte": false
+          }
+        ]
+      },
+      {
+        "vetor": "fontes",
+        "terceiraParte": false,
+        "frames": 1,
+        "scripts": [
+          {
+            "script": "https://privacy-test-pages.site/privacy-protections/fingerprinting/helpers/tests.js",
+            "dominio": "privacy-test-pages.site",
+            "terceiraParte": false
+          }
+        ]
+      },
+      {
+        "vetor": "audio",
+        "terceiraParte": false,
+        "frames": 1,
+        "scripts": [
+          {
+            "script": "https://privacy-test-pages.site/privacy-protections/fingerprinting/helpers/tests.js",
+            "dominio": "privacy-test-pages.site",
+            "terceiraParte": false
+          }
+        ]
+      }
+    ]
+  },
+  "rastreamento": {
+    "resumo": {
+      "sincronismos": 0,
+      "paresSync": 0,
+      "vazamentosPrimeiraParte": 0,
+      "idsCompartilhados": 0,
+      "bounces": 0,
+      "redirecionamentosSemCookie": 0,
+      "decoracoes": 0
+    },
+    "sync": [],
+    "bounce": [],
+    "decoracao": []
+  },
+  "hijack": {
+    "resumo": {
+      "total": 0,
+      "porTipo": {},
+      "alta": 0,
+      "media": 0,
+      "baixa": 0
+    },
+    "indicios": []
+  },
+  "bloqueio": {
+    "total": 0,
+    "porDominio": [],
+    "lista": {
+      "ativo": true,
+      "carregada": true,
+      "totalSessao": 0,
+      "regras": []
+    }
+  },
+  "erros": [],
+  "redirecionamentos": [],
+  "requestLog": [
+    {
+      "url": "https://privacy-test-pages.site/privacy-protections/fingerprinting/",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "main_frame",
+      "ts": "2026-09-28T14:56:33.288Z",
+      "terceiraParte": false,
+      "requestId": "602"
+    },
+    {
+      "url": "https://privacy-test-pages.site/privacy-protections/fingerprinting/helpers/diff.js",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "script",
+      "ts": "2026-09-28T14:56:33.817Z",
+      "terceiraParte": false,
+      "requestId": "603"
+    },
+    {
+      "url": "https://privacy-test-pages.site/privacy-protections/fingerprinting/helpers/constants.js",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "script",
+      "ts": "2026-09-28T14:56:33.817Z",
+      "terceiraParte": false,
+      "requestId": "604"
+    },
+    {
+      "url": "https://privacy-test-pages.site/privacy-protections/fingerprinting/helpers/canvas.js",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "script",
+      "ts": "2026-09-28T14:56:33.818Z",
+      "terceiraParte": false,
+      "requestId": "605"
+    },
+    {
+      "url": "https://privacy-test-pages.site/privacy-protections/fingerprinting/helpers/tests.js",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "script",
+      "ts": "2026-09-28T14:56:33.818Z",
+      "terceiraParte": false,
+      "requestId": "606"
+    },
+    {
+      "url": "https://privacy-test-pages.site/privacy-protections/fingerprinting/main.js",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "script",
+      "ts": "2026-09-28T14:56:33.818Z",
+      "terceiraParte": false,
+      "requestId": "607"
+    },
+    {
+      "url": "https://privacy-test-pages.site/privacy-protections/fingerprinting/style.css",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "stylesheet",
+      "ts": "2026-09-28T14:56:33.818Z",
+      "terceiraParte": false,
+      "requestId": "608"
+    },
+    {
+      "url": "https://privacy-test-pages.site/reflect-headers",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T14:56:34.881Z",
+      "terceiraParte": false,
+      "requestId": "609"
+    },
+    {
+      "url": "https://privacy-test-pages.site/favicon.ico",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "image",
+      "ts": "2026-09-28T14:56:34.998Z",
+      "terceiraParte": false,
+      "requestId": "610"
+    }
+  ]
+}

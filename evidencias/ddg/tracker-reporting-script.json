@@ -1,0 +1,297 @@
+{
+  "ferramenta": "PrivacyLens",
+  "versao": "1.0.0",
+  "geradoEm": "2026-09-28T14:48:23.149Z",
+  "pagina": {
+    "url": "https://privacy-test-pages.site/tracker-reporting/1major-via-script.html",
+    "dominio": "privacy-test-pages.site",
+    "inicioCarregamento": "2026-09-28T14:37:50.069Z",
+    "cookieStoreId": "firefox-default",
+    "navegacao": {
+      "requestId": "277",
+      "origem": "",
+      "origemDominio": "",
+      "inicio": "https://privacy-test-pages.site/tracker-reporting/1major-via-script.html",
+      "ts": 1790606270063,
+      "restauradaDoCache": false,
+      "anteriorVisto": true
+    },
+    "usuarioInteragiu": true
+  },
+  "score": {
+    "valor": 97,
+    "nota": "A",
+    "totalPenalidades": 3,
+    "criterios": [
+      {
+        "id": "terceiros",
+        "nome": "Domínios de 3ª parte contatados",
+        "peso": 15,
+        "observado": 1,
+        "detalhe": "doubleclick.net",
+        "penalidade": 3,
+        "formula": "min(15, 3 * log2(1 + n))",
+        "justificativa": "Superfície de exposição: cada terceiro recebe IP, User-Agent e a página visitada. Escala logarítmica porque o primeiro terceiro pesa muito mais que o trigésimo (a penalidade atinge o teto em 31 terceiros)."
+      },
+      {
+        "id": "cookies3p",
+        "nome": "Cookies de 3ª parte persistentes",
+        "peso": 20,
+        "observado": 0,
+        "detalhe": "nenhum",
+        "penalidade": 0,
+        "formula": "min(20, 4 * n)",
+        "justificativa": "Identificador estável entre sites: o mecanismo clássico de rastreamento."
+      },
+      {
+        "id": "cookies1pLongos",
+        "nome": "Cookies de 1ª parte persistentes > 90 dias",
+        "peso": 5,
+        "observado": 0,
+        "detalhe": "nenhum",
+        "penalidade": 0,
+        "formula": "min(5, 1 * n)",
+        "justificativa": "Cookie de primeira parte de longa duração funciona como identificador do visitante (ex.: _ga, _fbp), lido por scripts de terceiros embutidos na página."
+      },
+      {
+        "id": "storage3p",
+        "nome": "Storage HTML5 de 3ª parte (em iframe)",
+        "peso": 10,
+        "observado": 0,
+        "detalhe": "nenhum",
+        "penalidade": 0,
+        "formula": "min(10, 3 * n)",
+        "justificativa": "Persistência fora do ciclo de vida do cookie: sobrevive à limpeza de cookies e não é controlada pelas preferências de cookie."
+      },
+      {
+        "id": "localStorage1p",
+        "nome": "Volume de localStorage de 1ª parte",
+        "peso": 5,
+        "observado": 0,
+        "detalhe": "0 KB",
+        "penalidade": 0,
+        "formula": "min(5, bytes / 50 KB)",
+        "justificativa": "Indicador de supercookie ou de estado excessivo guardado no navegador do usuário."
+      },
+      {
+        "id": "canvas",
+        "nome": "Canvas fingerprinting",
+        "peso": 15,
+        "observado": false,
+        "detalhe": "não detectado",
+        "penalidade": 0,
+        "formula": "binário: 15 se detectado",
+        "justificativa": "Identificação sem consentimento e sem estado: não é removida limpando cookies e o usuário não consegue evitar."
+      },
+      {
+        "id": "sync",
+        "nome": "Cookie sync / bounce tracking",
+        "peso": 15,
+        "observado": {
+          "sincronismos": 0,
+          "bounce": false
+        },
+        "detalhe": "não detectado",
+        "penalidade": 0,
+        "formula": "8 por sync distinto, +15 se houver bounce, teto 15",
+        "justificativa": "Une as identidades do usuário em domínios diferentes, anulando o isolamento de cookies por site."
+      },
+      {
+        "id": "hijack",
+        "nome": "Indícios de hijacking / hook",
+        "peso": 10,
+        "observado": 0,
+        "detalhe": "nenhum",
+        "penalidade": 0,
+        "formula": "5 por indício de severidade média ou alta, teto 10",
+        "justificativa": "Vai além do rastreamento: é controle do navegador (canal de comando, interceptação de chamadas)."
+      },
+      {
+        "id": "sessao",
+        "nome": "Session recording / keylogging",
+        "peso": 5,
+        "observado": false,
+        "detalhe": "não detectado",
+        "penalidade": 0,
+        "formula": "binário: 5 se detectado",
+        "justificativa": "Captura o conteúdo digitado e os movimentos do usuário, não só metadados."
+      }
+    ],
+    "informativo": {
+      "facebookPixel": false,
+      "googleRemarketing": false
+    },
+    "calculadoEm": 1790606903149
+  },
+  "requisicoes": {
+    "total": 3,
+    "primeiraParte": 2,
+    "terceiraParte": 1,
+    "erros": 1,
+    "dominiosTerceiros": 1,
+    "logDescartadas": 0
+  },
+  "terceiros": [
+    {
+      "dominio": "doubleclick.net",
+      "requisicoes": 1,
+      "tipos": [
+        "script"
+      ],
+      "enviouCookie": false,
+      "recebeuSetCookie": false,
+      "primeira": "2026-09-28T14:37:51.507Z",
+      "ultima": "2026-09-28T14:37:51.507Z",
+      "exemplos": [
+        "https://doubleclick.net/tracker.js"
+      ],
+      "classificacaoFirefox": [
+        "tracking_ad",
+        "any_basic_tracking",
+        "any_strict_tracking"
+      ],
+      "erros": 1,
+      "ultimoErro": "NS_ERROR_CORRUPTED_CONTENT",
+      "bloqueadasFirefox": 0,
+      "bloqueadasPlugin": 0
+    }
+  ],
+  "cookies": {
+    "resumo": {
+      "injetados": 0,
+      "preexistentes": 0,
+      "removidos": 0,
+      "primeiraParte": 0,
+      "terceiraParte": 0,
+      "sessao": 0,
+      "persistente": 0,
+      "matriz": {
+        "primeira": {
+          "sessao": 0,
+          "persistente": 0
+        },
+        "terceira": {
+          "sessao": 0,
+          "persistente": 0
+        }
+      },
+      "terceiraPersistente": 0,
+      "primeiraLongoPrazo": 0,
+      "longoPrazo": 0,
+      "aptoCrossSite": 0,
+      "httpOnly": 0,
+      "secure": 0,
+      "particionados": 0,
+      "naoArmazenados": 0,
+      "viaHttp": 0,
+      "viaJavascript": 0
+    },
+    "snapshotEm": "2026-09-28T14:37:56.953Z",
+    "descartados": 0,
+    "lista": []
+  },
+  "storage": [
+    {
+      "origem": "https://privacy-test-pages.site",
+      "dominio": "privacy-test-pages.site",
+      "terceiraParte": false,
+      "topo": true,
+      "frames": 1,
+      "coletas": 3,
+      "momento": "load+3s",
+      "localStorage": {
+        "disponivel": true,
+        "erro": "",
+        "chaves": 0,
+        "bytes": 0,
+        "amostra": []
+      },
+      "sessionStorage": {
+        "disponivel": true,
+        "erro": "",
+        "chaves": 0,
+        "bytes": 0,
+        "amostra": []
+      },
+      "picoBytesLocal": 0,
+      "picoBytesSessao": 0,
+      "indexedDB": {
+        "bancos": [],
+        "viaHook": false,
+        "erro": ""
+      },
+      "documentCookie": {
+        "quantidade": 0,
+        "nomes": []
+      }
+    }
+  ],
+  "fingerprint": {
+    "canvasFingerprint": false,
+    "canvas": [],
+    "vetores": []
+  },
+  "rastreamento": {
+    "resumo": {
+      "sincronismos": 0,
+      "paresSync": 0,
+      "vazamentosPrimeiraParte": 0,
+      "idsCompartilhados": 0,
+      "bounces": 0,
+      "redirecionamentosSemCookie": 0,
+      "decoracoes": 0
+    },
+    "sync": [],
+    "bounce": [],
+    "decoracao": []
+  },
+  "hijack": {
+    "resumo": {
+      "total": 0,
+      "porTipo": {},
+      "alta": 0,
+      "media": 0,
+      "baixa": 0
+    },
+    "indicios": []
+  },
+  "bloqueio": {
+    "total": 0,
+    "porDominio": [],
+    "lista": {
+      "ativo": true,
+      "carregada": true,
+      "totalSessao": 0,
+      "regras": []
+    }
+  },
+  "erros": [],
+  "redirecionamentos": [],
+  "requestLog": [
+    {
+      "url": "https://privacy-test-pages.site/tracker-reporting/1major-via-script.html",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "main_frame",
+      "ts": "2026-09-28T14:37:50.063Z",
+      "terceiraParte": false,
+      "requestId": "277"
+    },
+    {
+      "url": "https://doubleclick.net/tracker.js",
+      "dominio": "doubleclick.net",
+      "tipo": "script",
+      "ts": "2026-09-28T14:37:51.507Z",
+      "terceiraParte": true,
+      "requestId": "278",
+      "erro": "NS_ERROR_CORRUPTED_CONTENT"
+    },
+    {
+      "url": "https://privacy-test-pages.site/favicon.ico",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "image",
+      "ts": "2026-09-28T14:37:51.933Z",
+      "terceiraParte": false,
+      "requestId": "279"
+    }
+  ]
+}

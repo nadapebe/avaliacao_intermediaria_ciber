@@ -1,0 +1,666 @@
+{
+  "ferramenta": "PrivacyLens",
+  "versao": "1.0.0",
+  "geradoEm": "2026-09-28T14:56:06.842Z",
+  "pagina": {
+    "url": "https://www.first-party.site/privacy-protections/storage-partitioning/",
+    "dominio": "first-party.site",
+    "inicioCarregamento": "2026-09-28T14:55:10.558Z",
+    "cookieStoreId": "firefox-default",
+    "navegacao": {
+      "requestId": "398",
+      "origem": "https://privacy-test-pages.site/privacy-protections/storage-partitioning/",
+      "origemDominio": "privacy-test-pages.site",
+      "inicio": "https://www.first-party.site/privacy-protections/storage-partitioning/",
+      "ts": 1790607310556,
+      "restauradaDoCache": false,
+      "anteriorVisto": true,
+      "anterior": {
+        "url": "https://privacy-test-pages.site/privacy-protections/storage-partitioning/",
+        "dominio": "privacy-test-pages.site",
+        "origemDominio": "privacy-test-pages.site",
+        "duracaoMs": 3448,
+        "cookiesPrimeiraParte": 0,
+        "cookieEnviado": true,
+        "usuarioInteragiu": false
+      }
+    },
+    "usuarioInteragiu": true
+  },
+  "score": {
+    "valor": 94,
+    "nota": "A",
+    "totalPenalidades": 6,
+    "criterios": [
+      {
+        "id": "terceiros",
+        "nome": "Domínios de 3ª parte contatados",
+        "peso": 15,
+        "observado": 1,
+        "detalhe": "privacy-test-pages.site",
+        "penalidade": 3,
+        "formula": "min(15, 3 * log2(1 + n))",
+        "justificativa": "Superfície de exposição: cada terceiro recebe IP, User-Agent e a página visitada. Escala logarítmica porque o primeiro terceiro pesa muito mais que o trigésimo (a penalidade atinge o teto em 31 terceiros)."
+      },
+      {
+        "id": "cookies3p",
+        "nome": "Cookies de 3ª parte persistentes",
+        "peso": 20,
+        "observado": 0,
+        "detalhe": "nenhum",
+        "penalidade": 0,
+        "formula": "min(20, 4 * n)",
+        "justificativa": "Identificador estável entre sites: o mecanismo clássico de rastreamento."
+      },
+      {
+        "id": "cookies1pLongos",
+        "nome": "Cookies de 1ª parte persistentes > 90 dias",
+        "peso": 5,
+        "observado": 3,
+        "detalhe": "partition_test (400 dias), partition_test (400 dias), partition_test_http (1423 dias)",
+        "penalidade": 3,
+        "formula": "min(5, 1 * n)",
+        "justificativa": "Cookie de primeira parte de longa duração funciona como identificador do visitante (ex.: _ga, _fbp), lido por scripts de terceiros embutidos na página."
+      },
+      {
+        "id": "storage3p",
+        "nome": "Storage HTML5 de 3ª parte (em iframe)",
+        "peso": 10,
+        "observado": 0,
+        "detalhe": "nenhum",
+        "penalidade": 0,
+        "formula": "min(10, 3 * n)",
+        "justificativa": "Persistência fora do ciclo de vida do cookie: sobrevive à limpeza de cookies e não é controlada pelas preferências de cookie."
+      },
+      {
+        "id": "localStorage1p",
+        "nome": "Volume de localStorage de 1ª parte",
+        "peso": 5,
+        "observado": 100,
+        "detalhe": "0 KB",
+        "penalidade": 0,
+        "formula": "min(5, bytes / 50 KB)",
+        "justificativa": "Indicador de supercookie ou de estado excessivo guardado no navegador do usuário."
+      },
+      {
+        "id": "canvas",
+        "nome": "Canvas fingerprinting",
+        "peso": 15,
+        "observado": false,
+        "detalhe": "não detectado",
+        "penalidade": 0,
+        "formula": "binário: 15 se detectado",
+        "justificativa": "Identificação sem consentimento e sem estado: não é removida limpando cookies e o usuário não consegue evitar."
+      },
+      {
+        "id": "sync",
+        "nome": "Cookie sync / bounce tracking",
+        "peso": 15,
+        "observado": {
+          "sincronismos": 0,
+          "bounce": false
+        },
+        "detalhe": "não detectado",
+        "penalidade": 0,
+        "formula": "8 por sync distinto, +15 se houver bounce, teto 15",
+        "justificativa": "Une as identidades do usuário em domínios diferentes, anulando o isolamento de cookies por site."
+      },
+      {
+        "id": "hijack",
+        "nome": "Indícios de hijacking / hook",
+        "peso": 10,
+        "observado": 0,
+        "detalhe": "nenhum",
+        "penalidade": 0,
+        "formula": "5 por indício de severidade média ou alta, teto 10",
+        "justificativa": "Vai além do rastreamento: é controle do navegador (canal de comando, interceptação de chamadas)."
+      },
+      {
+        "id": "sessao",
+        "nome": "Session recording / keylogging",
+        "peso": 5,
+        "observado": false,
+        "detalhe": "não detectado",
+        "penalidade": 0,
+        "formula": "binário: 5 se detectado",
+        "justificativa": "Captura o conteúdo digitado e os movimentos do usuário, não só metadados."
+      }
+    ],
+    "informativo": {
+      "facebookPixel": false,
+      "googleRemarketing": false
+    },
+    "calculadoEm": 1790607366842
+  },
+  "requisicoes": {
+    "total": 29,
+    "primeiraParte": 26,
+    "terceiraParte": 3,
+    "erros": 0,
+    "dominiosTerceiros": 1,
+    "logDescartadas": 0
+  },
+  "terceiros": [
+    {
+      "dominio": "privacy-test-pages.site",
+      "requisicoes": 3,
+      "tipos": [
+        "image"
+      ],
+      "enviouCookie": false,
+      "recebeuSetCookie": false,
+      "primeira": "2026-09-28T14:55:19.586Z",
+      "ultima": "2026-09-28T14:55:20.133Z",
+      "exemplos": [
+        "https://privacy-test-pages.site/partitioning/clear_hsts.png",
+        "https://privacy-test-pages.site/partitioning/set_hsts.png"
+      ],
+      "classificacaoFirefox": [],
+      "erros": 0,
+      "ultimoErro": "",
+      "bloqueadasFirefox": 0,
+      "bloqueadasPlugin": 0
+    }
+  ],
+  "cookies": {
+    "resumo": {
+      "injetados": 3,
+      "preexistentes": 0,
+      "removidos": 0,
+      "primeiraParte": 3,
+      "terceiraParte": 0,
+      "sessao": 0,
+      "persistente": 3,
+      "matriz": {
+        "primeira": {
+          "sessao": 0,
+          "persistente": 3
+        },
+        "terceira": {
+          "sessao": 0,
+          "persistente": 0
+        }
+      },
+      "terceiraPersistente": 0,
+      "primeiraLongoPrazo": 3,
+      "longoPrazo": 3,
+      "aptoCrossSite": 3,
+      "httpOnly": 1,
+      "secure": 3,
+      "particionados": 0,
+      "naoArmazenados": 0,
+      "viaHttp": 1,
+      "viaJavascript": 2
+    },
+    "snapshotEm": "2026-09-28T14:55:17.095Z",
+    "descartados": 0,
+    "lista": [
+      {
+        "nome": "partition_test",
+        "dominio": "www.first-party.site",
+        "dominioRegistravel": "first-party.site",
+        "path": "/privacy-protections/storage-partitioning",
+        "terceiraParte": false,
+        "persistente": true,
+        "duracaoDias": 400,
+        "longoPrazo": true,
+        "expira": "2027-11-02T14:55:19.563Z",
+        "httpOnly": false,
+        "secure": true,
+        "sameSite": "none",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": true,
+        "hostOnly": true,
+        "particionado": false,
+        "particao": "",
+        "origem": "javascript",
+        "fontes": [
+          "onChanged"
+        ],
+        "injetado": true,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 1,
+        "valorAmostra": "2703...(36 caracteres)",
+        "primeiraVez": "2026-09-28T14:55:19.567Z"
+      },
+      {
+        "nome": "partition_test",
+        "dominio": "www.first-party.site",
+        "dominioRegistravel": "first-party.site",
+        "path": "/",
+        "terceiraParte": false,
+        "persistente": true,
+        "duracaoDias": 400,
+        "longoPrazo": true,
+        "expira": "2027-11-02T14:55:19.587Z",
+        "httpOnly": false,
+        "secure": true,
+        "sameSite": "none",
+        "sameSiteDeclarado": null,
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": true,
+        "hostOnly": true,
+        "particionado": false,
+        "particao": "",
+        "origem": "javascript",
+        "fontes": [
+          "onChanged"
+        ],
+        "injetado": true,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "",
+        "escritas": 1,
+        "valorAmostra": "2703...(36 caracteres)",
+        "primeiraVez": "2026-09-28T14:55:19.588Z"
+      },
+      {
+        "nome": "partition_test_http",
+        "dominio": "www.first-party.site",
+        "dominioRegistravel": "first-party.site",
+        "path": "/partitioning",
+        "terceiraParte": false,
+        "persistente": true,
+        "duracaoDias": 1423.2,
+        "longoPrazo": true,
+        "expira": "2030-08-21T20:00:00.000Z",
+        "httpOnly": true,
+        "secure": true,
+        "sameSite": "none",
+        "sameSiteDeclarado": "none",
+        "sameSiteEfetivo": "none",
+        "aptoCrossSite": true,
+        "hostOnly": true,
+        "particionado": false,
+        "particao": "",
+        "origem": "http",
+        "fontes": [
+          "onChanged",
+          "header"
+        ],
+        "injetado": true,
+        "armazenado": true,
+        "removido": false,
+        "viaRedirect": false,
+        "emissor": "https://www.first-party.site/partitioning/set-cookie?cookieName=partition_test_http&cookieValue=270368bc-a034-4f58-8f09-5066ad1e9556",
+        "escritas": 2,
+        "valorAmostra": "2703...(36 caracteres)",
+        "primeiraVez": "2026-09-28T14:55:19.747Z"
+      }
+    ]
+  },
+  "storage": [
+    {
+      "origem": "https://www.first-party.site",
+      "dominio": "first-party.site",
+      "terceiraParte": false,
+      "topo": true,
+      "frames": 3,
+      "coletas": 11,
+      "momento": "load+3s",
+      "localStorage": {
+        "disponivel": true,
+        "erro": "",
+        "chaves": 1,
+        "bytes": 100,
+        "amostra": [
+          "partition_test"
+        ]
+      },
+      "sessionStorage": {
+        "disponivel": true,
+        "erro": "",
+        "chaves": 1,
+        "bytes": 100,
+        "amostra": [
+          "partition_test"
+        ]
+      },
+      "picoBytesLocal": 100,
+      "picoBytesSessao": 100,
+      "indexedDB": {
+        "bancos": [
+          "partition_test"
+        ],
+        "viaHook": true,
+        "erro": ""
+      },
+      "documentCookie": {
+        "quantidade": 2,
+        "nomes": [
+          "partition_test",
+          "partition_test"
+        ]
+      }
+    }
+  ],
+  "fingerprint": {
+    "canvasFingerprint": false,
+    "canvas": [],
+    "vetores": []
+  },
+  "rastreamento": {
+    "resumo": {
+      "sincronismos": 0,
+      "paresSync": 0,
+      "vazamentosPrimeiraParte": 0,
+      "idsCompartilhados": 0,
+      "bounces": 0,
+      "redirecionamentosSemCookie": 0,
+      "decoracoes": 0
+    },
+    "sync": [],
+    "bounce": [],
+    "decoracao": []
+  },
+  "hijack": {
+    "resumo": {
+      "total": 0,
+      "porTipo": {},
+      "alta": 0,
+      "media": 0,
+      "baixa": 0
+    },
+    "indicios": []
+  },
+  "bloqueio": {
+    "total": 0,
+    "porDominio": [],
+    "lista": {
+      "ativo": true,
+      "carregada": true,
+      "totalSessao": 0,
+      "regras": []
+    }
+  },
+  "erros": [],
+  "redirecionamentos": [
+    {
+      "requestId": "427",
+      "tipo": "xmlhttprequest",
+      "de": "https://www.first-party.site/privacy-protections/storage-partitioning/serviceworker-write?data=270368bc-a034-4f58-8f09-5066ad1e9556",
+      "para": "https://www.first-party.site/privacy-protections/storage-partitioning/serviceworker-write?data=270368bc-a034-4f58-8f09-5066ad1e9556",
+      "dominioDe": "first-party.site",
+      "dominioPara": "first-party.site",
+      "status": 0,
+      "setCookie": false,
+      "interno": false,
+      "ts": "2026-09-28T14:55:19.766Z"
+    },
+    {
+      "requestId": "428",
+      "tipo": "image",
+      "de": "https://privacy-test-pages.site/partitioning/set_hsts.png",
+      "para": "https://privacy-test-pages.site/partitioning/set_hsts.png",
+      "dominioDe": "privacy-test-pages.site",
+      "dominioPara": "privacy-test-pages.site",
+      "status": 0,
+      "setCookie": false,
+      "interno": false,
+      "ts": "2026-09-28T14:55:20.132Z"
+    },
+    {
+      "requestId": "456",
+      "tipo": "other",
+      "de": "https://www.first-party.site/partitioning/resource?fileType=prefetch&key=270368bc-a034-4f58-8f09-5066ad1e9556",
+      "para": "https://www.first-party.site/partitioning/resource?fileType=prefetch&key=270368bc-a034-4f58-8f09-5066ad1e9556",
+      "dominioDe": "first-party.site",
+      "dominioPara": "first-party.site",
+      "status": 0,
+      "setCookie": false,
+      "interno": false,
+      "ts": "2026-09-28T14:55:22.076Z"
+    },
+    {
+      "requestId": "599",
+      "tipo": "xmlhttprequest",
+      "de": "https://www.first-party.site/partitioning/get-results?key=270368bc-a034-4f58-8f09-5066ad1e9556",
+      "para": "https://www.first-party.site/partitioning/get-results?key=270368bc-a034-4f58-8f09-5066ad1e9556",
+      "dominioDe": "first-party.site",
+      "dominioPara": "first-party.site",
+      "status": 0,
+      "setCookie": false,
+      "interno": false,
+      "ts": "2026-09-28T14:55:39.884Z"
+    }
+  ],
+  "requestLog": [
+    {
+      "url": "https://www.first-party.site/privacy-protections/storage-partitioning/",
+      "dominio": "first-party.site",
+      "tipo": "main_frame",
+      "ts": "2026-09-28T14:55:10.556Z",
+      "terceiraParte": false,
+      "requestId": "398"
+    },
+    {
+      "url": "https://www.first-party.site/helpers/idb-wrapper.js",
+      "dominio": "first-party.site",
+      "tipo": "script",
+      "ts": "2026-09-28T14:55:11.313Z",
+      "terceiraParte": false,
+      "requestId": "399"
+    },
+    {
+      "url": "https://www.first-party.site/helpers/uuidv4.min.js",
+      "dominio": "first-party.site",
+      "tipo": "script",
+      "ts": "2026-09-28T14:55:11.314Z",
+      "terceiraParte": false,
+      "requestId": "400"
+    },
+    {
+      "url": "https://www.first-party.site/privacy-protections/storage-partitioning/helpers/tests.js",
+      "dominio": "first-party.site",
+      "tipo": "script",
+      "ts": "2026-09-28T14:55:11.315Z",
+      "terceiraParte": false,
+      "requestId": "401"
+    },
+    {
+      "url": "https://www.first-party.site/privacy-protections/storage-partitioning/helpers/common.js",
+      "dominio": "first-party.site",
+      "tipo": "script",
+      "ts": "2026-09-28T14:55:11.315Z",
+      "terceiraParte": false,
+      "requestId": "402"
+    },
+    {
+      "url": "https://www.first-party.site/privacy-protections/storage-partitioning/main.js",
+      "dominio": "first-party.site",
+      "tipo": "script",
+      "ts": "2026-09-28T14:55:11.316Z",
+      "terceiraParte": false,
+      "requestId": "403"
+    },
+    {
+      "url": "https://www.first-party.site/privacy-protections/storage-partitioning/style.css",
+      "dominio": "first-party.site",
+      "tipo": "stylesheet",
+      "ts": "2026-09-28T14:55:11.319Z",
+      "terceiraParte": false,
+      "requestId": "404"
+    },
+    {
+      "url": "https://www.first-party.site/favicon.ico",
+      "dominio": "first-party.site",
+      "tipo": "image",
+      "ts": "2026-09-28T14:55:12.072Z",
+      "terceiraParte": false,
+      "requestId": "405"
+    },
+    {
+      "url": "https://www.first-party.site/privacy-protections/storage-partitioning/iframe.html?mode=store&sessionId=270368bc-a034-4f58-8f09-5066ad1e9556",
+      "dominio": "first-party.site",
+      "tipo": "sub_frame",
+      "ts": "2026-09-28T14:55:18.953Z",
+      "terceiraParte": false,
+      "requestId": "407"
+    },
+    {
+      "url": "https://www.first-party.site/partitioning/resource?fileType=favicon&key=270368bc-a034-4f58-8f09-5066ad1e9556",
+      "dominio": "first-party.site",
+      "tipo": "image",
+      "ts": "2026-09-28T14:55:19.036Z",
+      "terceiraParte": false,
+      "requestId": "408"
+    },
+    {
+      "url": "https://www.first-party.site/helpers/idb-wrapper.js",
+      "dominio": "first-party.site",
+      "tipo": "script",
+      "ts": "2026-09-28T14:55:19.139Z",
+      "terceiraParte": false,
+      "requestId": "409"
+    },
+    {
+      "url": "https://www.first-party.site/privacy-protections/storage-partitioning/helpers/common.js",
+      "dominio": "first-party.site",
+      "tipo": "script",
+      "ts": "2026-09-28T14:55:19.139Z",
+      "terceiraParte": false,
+      "requestId": "410"
+    },
+    {
+      "url": "https://www.first-party.site/privacy-protections/storage-partitioning/helpers/tests.js",
+      "dominio": "first-party.site",
+      "tipo": "script",
+      "ts": "2026-09-28T14:55:19.139Z",
+      "terceiraParte": false,
+      "requestId": "411"
+    },
+    {
+      "url": "https://www.first-party.site/privacy-protections/storage-partitioning/iframe.js",
+      "dominio": "first-party.site",
+      "tipo": "script",
+      "ts": "2026-09-28T14:55:19.140Z",
+      "terceiraParte": false,
+      "requestId": "412"
+    },
+    {
+      "url": "https://www.first-party.site/partitioning/set-cookie?cookieName=partition_test_http&cookieValue=270368bc-a034-4f58-8f09-5066ad1e9556",
+      "dominio": "first-party.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T14:55:19.568Z",
+      "terceiraParte": false,
+      "requestId": "416"
+    },
+    {
+      "url": "https://www.first-party.site/partitioning/resource?fileType=xhr&key=270368bc-a034-4f58-8f09-5066ad1e9556",
+      "dominio": "first-party.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T14:55:19.575Z",
+      "terceiraParte": false,
+      "requestId": "418"
+    },
+    {
+      "url": "https://www.first-party.site/partitioning/resource?fileType=fetch&key=270368bc-a034-4f58-8f09-5066ad1e9556",
+      "dominio": "first-party.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T14:55:19.575Z",
+      "terceiraParte": false,
+      "requestId": "419"
+    },
+    {
+      "url": "https://www.first-party.site/partitioning/resource?fileType=page&key=270368bc-a034-4f58-8f09-5066ad1e9556",
+      "dominio": "first-party.site",
+      "tipo": "sub_frame",
+      "ts": "2026-09-28T14:55:19.584Z",
+      "terceiraParte": false,
+      "requestId": "420"
+    },
+    {
+      "url": "https://www.first-party.site/partitioning/resource?fileType=css&key=270368bc-a034-4f58-8f09-5066ad1e9556",
+      "dominio": "first-party.site",
+      "tipo": "stylesheet",
+      "ts": "2026-09-28T14:55:19.585Z",
+      "terceiraParte": false,
+      "requestId": "421"
+    },
+    {
+      "url": "https://www.first-party.site/partitioning/resource?fileType=image&key=270368bc-a034-4f58-8f09-5066ad1e9556",
+      "dominio": "first-party.site",
+      "tipo": "image",
+      "ts": "2026-09-28T14:55:19.585Z",
+      "terceiraParte": false,
+      "requestId": "422"
+    },
+    {
+      "url": "https://privacy-test-pages.site/partitioning/clear_hsts.png",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "image",
+      "ts": "2026-09-28T14:55:19.586Z",
+      "terceiraParte": true,
+      "requestId": "423"
+    },
+    {
+      "url": "https://www.first-party.site/partitioning/resource?fileType=font&key=270368bc-a034-4f58-8f09-5066ad1e9556",
+      "dominio": "first-party.site",
+      "tipo": "font",
+      "ts": "2026-09-28T14:55:19.592Z",
+      "terceiraParte": false,
+      "requestId": "424"
+    },
+    {
+      "url": "https://www.first-party.site/privacy-protections/storage-partitioning/serviceworker-write?data=270368bc-a034-4f58-8f09-5066ad1e9556",
+      "dominio": "first-party.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T14:55:19.762Z",
+      "terceiraParte": false,
+      "requestId": "427"
+    },
+    {
+      "url": "https://privacy-test-pages.site/partitioning/set_hsts.png",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "image",
+      "ts": "2026-09-28T14:55:20.130Z",
+      "terceiraParte": true,
+      "requestId": "428"
+    },
+    {
+      "url": "https://privacy-test-pages.site/partitioning/set_hsts.png",
+      "dominio": "privacy-test-pages.site",
+      "tipo": "image",
+      "ts": "2026-09-28T14:55:20.133Z",
+      "terceiraParte": true,
+      "requestId": "428"
+    },
+    {
+      "url": "https://www.first-party.site/partitioning/resource?fileType=prefetch&key=270368bc-a034-4f58-8f09-5066ad1e9556",
+      "dominio": "first-party.site",
+      "tipo": "other",
+      "ts": "2026-09-28T14:55:21.999Z",
+      "terceiraParte": false,
+      "requestId": "456"
+    },
+    {
+      "url": "https://www.first-party.site/partitioning/resource?fileType=prefetch&key=270368bc-a034-4f58-8f09-5066ad1e9556",
+      "dominio": "first-party.site",
+      "tipo": "other",
+      "ts": "2026-09-28T14:55:22.077Z",
+      "terceiraParte": false,
+      "requestId": "456"
+    },
+    {
+      "url": "https://www.first-party.site/partitioning/get-results?key=270368bc-a034-4f58-8f09-5066ad1e9556",
+      "dominio": "first-party.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T14:55:39.883Z",
+      "terceiraParte": false,
+      "requestId": "599"
+    },
+    {
+      "url": "https://www.first-party.site/partitioning/get-results?key=270368bc-a034-4f58-8f09-5066ad1e9556",
+      "dominio": "first-party.site",
+      "tipo": "xmlhttprequest",
+      "ts": "2026-09-28T14:55:39.886Z",
+      "terceiraParte": false,
+      "requestId": "599"
+    }
+  ]
+}
